@@ -12,9 +12,17 @@ import "./index.css";
 
 // Route imports
 import LandingPage from "./routes/landing/LandingPage";
+import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<LandingPage />}></Route>),
+  createRoutesFromElements(
+    <Route path="/" element={<PublicLayout />}>
+      <Route index element={<LandingPage />} />
+      <Route path="createPlatform" element={<LandingPage />} />
+      <Route path="joinPlatform" element={<LandingPage />} />
+      <Route path="signIn" element={<LandingPage />} />
+    </Route>,
+  ),
 );
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
