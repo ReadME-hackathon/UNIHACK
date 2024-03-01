@@ -23,20 +23,20 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="max-w-screen-lg">
+    <div className="max-w-screen-lg m-auto mb-10">
       <HeroBanner />
-
-      <div>
-        <h2>Big title text</h2>
-        <p>Body Text that describes something and makes the product look like something that people will actually use.</p>
+      <div className="flex flex-col gap-10 pt-8 pb-32 rounded-xl bg-gray-200">
         <LandingBar />
-        <div className="grid">
+        <div className="flex flex-col items-center gap-6">
+          <h2 className="text-6xl font-bold text-center">Big title text</h2>
+          <p className="w-[350px] h-24 mb-10 font-medium text-center">Body Text that describes something and makes the product look like something that people will actually use.</p>
+        </div>
+        <div className="grid gap-24 ">
               {features.map((feature) => (
                 <LandingFeature {...feature} />
               ))}
             </div>
       </div>
-      
     </div>
   );
 };
