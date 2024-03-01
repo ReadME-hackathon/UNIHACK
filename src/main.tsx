@@ -18,6 +18,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<PublicLayout />}>
       <Route index element={<LandingPage />} />
+      <Route path="createPlatform" element={<LandingPage />} />
+      <Route path="joinPlatform" element={<LandingPage />} />
+      <Route path="signIn" element={<LandingPage />} />
     </Route>,
   ),
 );
