@@ -91,7 +91,7 @@ function ProfileSetup() {
 
     return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <form onSubmit={form.handleSubmit(onSubmit)} className={`${showSelector ? "invisible" : "visible"}`}>
           <FormField
             control={form.control}
             name="studentGoal"
@@ -136,20 +136,30 @@ function ProfileSetup() {
             Select Availability
             <CalendarIcon />
           </a>
-          {showSelector ? (
-            <div className="max-h-1/4 absolute top-[20%] flex w-2/5 flex-col items-center bg-white">
+          <Button
+            className="mt-24 w-fit rounded bg-indigo-500 text-white hover:bg-indigo-500"
+            type="submit"
+          >
+            Continue
+          </Button>
+        </form>
+        {showSelector ? (
+            <div className="max-h-1/4 absolute top-[23%] flex w-2/5 flex-col items-center bg-white">
               <ScheduleSelector
                 selection={studentSchedule.schedule}
-                numDays={5}
+                numDays={7}
                 minTime={8}
                 maxTime={25}
                 hourlyChunks={1}
                 dateFormat={"ddd"}
                 startDate={startDate}
                 onChange={handleChange}
+                hoveredColor={"rgba(165, 180, 252, 1)"}
+                selectedColor={"rgba(99, 102, 241, 1)"}
+                unselectedColor={"rgba(224, 231, 255,1)"}
               />
               <a
-                className="ml-20 mt-2 w-fit rounded bg-black px-4 py-2 text-base text-white hover:cursor-pointer"
+                className="ml-24 mt-5 w-fit rounded bg-black px-4 py-2 text-base text-white hover:cursor-pointer"
                 onClick={() => setSelector(false)}
               >
                 Save Availability
@@ -158,19 +168,12 @@ function ProfileSetup() {
           ) : (
             <></>
           )}
-          <Button
-            className="mt-24 w-fit rounded bg-indigo-500 text-white hover:bg-indigo-500"
-            type="submit"
-          >
-            Continue
-          </Button>
-        </form>
       </Form>
     );
   };
 
   return (
-    <div className="m-auto flex h-screen max-w-screen-lg items-center justify-between">
+    <div className="mx-auto flex h-screen max-w-screen-lg items-center justify-between">
       <div className="h-4/6 w-2/5 bg-gray-200"></div>
       <div className="flex h-4/6 flex-col justify-center text-6xl font-bold">
         <h2>Set up your profile</h2>
