@@ -1,5 +1,5 @@
 const LandingPage = () => {
-  return <div>landing</div>;
+  return <div className=" text-4xl">landing</div>;
 };
 
 export default LandingPage;
