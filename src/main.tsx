@@ -8,6 +8,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import "./index.css";
+
 // Route imports
 import LandingPage from "./routes/landing/LandingPage";
 
