@@ -1,8 +1,10 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
+import { handleGoogleLoginSuccess } from "@/services/firestoreServices";
 
 const SignIn = () => {
-  const navigate = useNavigate();
+  const onSuccess = (credentialResponse: any) => {
+    handleGoogleLoginSuccess(credentialResponse);
+  };
 
   return (
     <GoogleOAuthProvider clientId="1013964470-v6pc6mdo4f0ctek97kimggbpt04q04ft.apps.googleusercontent.com">
@@ -14,9 +16,7 @@ const SignIn = () => {
           <div className="flex flex-col gap-4 rounded bg-neutral-50 p-8">
             <img className=" h-80 w-80"></img>
             <GoogleLogin
-              onSuccess={() => {
-                navigate("/");
-              }}
+              onSuccess={onSuccess}
               onError={() => {
                 console.log("Login Failed");
               }}
