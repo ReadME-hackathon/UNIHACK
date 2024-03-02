@@ -1,6 +1,5 @@
 import MembersList from "@/components/MembersList/MembersList";
 import TutorialCard from "@/components/TutorialCard/TutorialCard";
-import TutorialCardProps from "@/components/TutorialCard/TutorialCardProps";
 import { getSpaceData } from "@/services/spacesServices";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -76,14 +75,20 @@ const AdminSpaceView = () => {
   // Gets the space ID
   let { spaceId } = useParams();
 
-  if (!spaceId) {
-    spaceId = "";
-  }
-
-  // Grabbing data on load
+  // When page initially loads
   useEffect(() => {
-    console.log("good luck!");
-    getSpaceData(spaceId!);
+    if (!spaceId) {
+      spaceId = "";
+    }
+
+    getSpaceData(spaceId)
+      .then((result) => {
+        console.log(result);
+        setSpaceData(result?.data as Space);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   }, []);
 
   return (

@@ -42,7 +42,7 @@ const Sidebar = () => {
         <span className=" font-bold">{name}</span>
       </div>
       <div className="flex flex-col gap-2">
-        <Link to="/" className="flex flex-row items-center p-4 text-orange-300">
+        <Link to="/user" className="flex flex-row items-center p-4 text-orange-300">
           <HomeIcon className="mr-2 h-4 w-4" /> My GroupSpaces
         </Link>
         <Link to="/" className="flex flex-row items-center p-4 text-orange-300">

@@ -4,6 +4,5 @@ export default interface TutorialCardProps {
   users: string[];
   size: number;
   enrolled: number;
-  goal: string;
-  timeCompat: number;
+  description: string;
 }
