@@ -1,8 +1,11 @@
-import LoadingTeam from "@/components/Loading/LoadingTeam"
+import LoadingTeam from "@/components/Loading/LoadingTeam";
+import "./LoadingTeamPage.css";
 
 const LoadingTeamPage = () => {
   return (
-    <LoadingTeam />
+    <div className="w-screen h-screen pt-16 fixed bg-slate-200">
+      <LoadingTeam />
+    </div>
   )
 }
 
