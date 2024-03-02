@@ -19,7 +19,7 @@ const SignIn = () => {
       <div className="flex h-full w-2/5 items-center">
         <div className="flex flex-col gap-4 rounded bg-neutral-50 p-8">
           <img className=" h-80 w-80"></img>
-          <button onClick={signIn} className="login-with-google-btn">
+          <button onClick={signIn} className="login-with-google-btn transition-all hover:shadow-md">
             Sign in
           </button>
         </div>
