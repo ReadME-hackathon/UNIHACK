@@ -15,27 +15,52 @@ export async function getSpaceData(spaceId: string) {
   }
 }
 
-export async function getUserGroups() {
+export async function getUserSpaces() {
   if (!isLoggedIn) {
     throw new Error("Not logged in");
   }
 
-  const temp: Group[] = [
-    {
-      description: "I like to do something",
-      leader_id: "1234",
-      member_count: 4,
-      members: ["hi"],
-      name: "hi",
-    },
-    {
-      description: "I like to do something",
-      leader_id: "1234",
-      member_count: 4,
-      members: ["hi"],
-      name: "hi",
-    },
-  ];
+  try {
+    let result = await httpsCallable(functions, "getSpaceData")();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-  return temp;
+export async function addUserToSpace() {
+  const sample = {
+    name: "Emma",
+    features: [
+      {
+        name: "hobbies",
+        data: ["Reading", "Writing"],
+      },
+      {
+        name: "academic_year",
+        data: "First Year",
+      },
+      {
+        name: "average_score",
+        data: 85,
+      },
+      {
+        name: "schedule",
+        data: {
+          Monday: ["09:00", "10:00"],
+          Tuesday: ["13:00", "14:00"],
+          Friday: ["21:00"],
+        },
+      },
+    ],
+  };
+  try {
+    let result = await httpsCallable(
+      functions,
+      "addUserToSpace",
+    )({ space_id: "SynQEMskRLe8wNncI0rw", user_data: sample });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
