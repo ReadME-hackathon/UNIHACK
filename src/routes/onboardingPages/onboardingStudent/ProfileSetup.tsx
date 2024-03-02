@@ -94,6 +94,19 @@ function ProfileSetup() {
         <form onSubmit={form.handleSubmit(onSubmit)} className={`${showSelector ? "invisible" : "visible"}`}>
           <FormField
             control={form.control}
+            name="studentName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input className="w-5/6 border-none bg-gray-200" placeholder="" {...field} />
+                </FormControl>
+                <FormMessage className="absolute" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="studentGoal"
             render={({ field }) => (
               <FormItem>
@@ -105,26 +118,13 @@ function ProfileSetup() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-10 bg-white">
-                    <SelectItem value="H1">H1</SelectItem>
-                    <SelectItem value="H2">H2</SelectItem>
-                    <SelectItem value="H3">H3</SelectItem>
-                    <SelectItem value="Pass">Pass</SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H1">H1</SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H2">H2</SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H3">H3</SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="Pass">Pass</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage className="absolute"/>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="studentName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input className="w-5/6 border-none bg-gray-200" placeholder="" {...field} />
-                </FormControl>
-                <FormMessage className="absolute" />
               </FormItem>
             )}
           />
@@ -144,7 +144,7 @@ function ProfileSetup() {
           </Button>
         </form>
         {showSelector ? (
-            <div className="max-h-1/4 absolute top-[23%] flex w-2/5 flex-col items-center bg-white">
+            <div className="max-h-1/4 absolute top-[17%] flex w-2/5 flex-col items-center bg-white">
               <ScheduleSelector
                 selection={studentSchedule.schedule}
                 numDays={7}
