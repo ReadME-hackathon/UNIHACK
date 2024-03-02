@@ -106,11 +106,29 @@ exports.deleteSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Retrieves spaces created by a given user ()
-exports.getUserSpaces = onCallWrapper(async ({ data, context }) => {
+exports.getOwnedSpaces = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, []);
 
   // Retrieve spaces created by the user
   const snapshot = await db.collection("spaces").where("created_by", "==", uid).get();
+
+  const spaces = [];
+  snapshot.forEach((doc) => {
+    spaces.push({
+      space_id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  return { spaces };
+});
+
+// Retrieves spaces where the current user is a member
+exports.getMemberSpaces = onCallWrapper(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, []);
+
+  // Retrieve spaces where the user is a member
+  const snapshot = await db.collection("spaces").where("members", "array-contains", uid).get();
 
   const spaces = [];
   snapshot.forEach((doc) => {
