@@ -8,8 +8,8 @@ const HeroBanner = () => {
       <div className=" col-start-[16] col-end-[21] row-start-3 row-end-11 rounded-[4px] bg-gray-300 "></div>
       <h2 className="w-[750px] text-6xl font-bold text-center col-start-4 row-start-5">A new way to find teammates</h2>
       <div className="flex gap-4 col-start-9 row-start-8">
-        <Button variant="default" size="default" className="bg-gray-200">Start event</Button>
-        <Button variant='default' className="bg-gray-200">Join event</Button>
+        <Button className="w-56 h-12 text-white bg-orange-500 shadow-md rounded-[4px]">Start event</Button>
+        <Button className="w-56 h-12 text-white bg-indigo-600 shadow-md rounded-[4px]">Join event</Button>
       </div>
     </div>
     );

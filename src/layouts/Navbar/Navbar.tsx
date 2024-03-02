@@ -28,7 +28,7 @@ const Navbar = () => {
           <NavbarButton link="/createPlatform" text="Create team platform"></NavbarButton>
           <NavbarButton link="/joinPlatform" text="Join platform"></NavbarButton>
           {loginState ? (
-            <NavbarButton link="/myTeams" text="My Teams"></NavbarButton>
+            <NavbarButton link="/user" text="My dashboard"></NavbarButton>
           ) : (
             <NavbarButton link="/signIn" text="Sign in"></NavbarButton>
           )}
