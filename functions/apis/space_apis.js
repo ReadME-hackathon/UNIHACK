@@ -1,51 +1,51 @@
-const admin = require("firebase-admin");
-admin.initializeApp();
-const db = admin.firestore();
+const db = require("firebase-admin").firestore();
 
 const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 
-// const test_data = {
-//   data: {
-//     space_data: {
-//       name: "Space Sample",
-//       min_size: 1,
-//       max_size: 3,
-//       features: [
-//         {
-//           name: "numberFeature",
-//           type: "NUMBER",
-//           optional: false,
-//         },
-//         {
-//           name: "textFeature",
-//           type: "STRING",
-//           optional: false,
-//         },
-//         {
-//           name: "selectFeature", // aka dropdown
-//           type: "SELECT",
-//           options: ["option_1", "option_2", "option_3"],
-//           optional: false,
-//           multi_select: false, // e.g. multiple selections allowed?
-//           ordered: false, // e.g. H1, H2a would need to be ordered
-//         },
-//         {
-//           name: "checkboxFeature",
-//           type: "CHECKBOX",
-//           optional: false,
-//         },
-//         {
-//           name: "availabilityFeature",
-//           type: "AVAILABILITY",
-//           optional: false,
-//         },
-//       ],
-//     },
-//   },
-// };
+// A feature's name must uniquely identify it.
+const test_data = {
+  data: {
+    space_data: {
+      name: "Space Sample",
+      min_size: 1,
+      max_size: 3,
+      features: [
+        {
+          name: "numberFeature",
+          type: "NUMBER",
+          optional: false,
+        },
+        {
+          name: "textFeature",
+          type: "STRING",
+          optional: false,
+        },
+        {
+          name: "selectFeature", // aka dropdown
+          type: "SELECT",
+          options: ["option_1", "option_2", "option_3"],
+          optional: false,
+          multi_select: false, // e.g. multiple selections allowed?
+          ordered: false, // e.g. H1, H2a would need to be ordered
+        },
+        {
+          name: "checkboxFeature",
+          type: "CHECKBOX",
+          optional: false,
+        },
+        {
+          name: "availabilityFeature",
+          type: "AVAILABILITY",
+          optional: false,
+        },
+      ],
+    },
+  },
+};
 
 // Ensures a space data is valid. (Doesn't have to be complete)
+// TODO: Ensure feature names are strictly unique within the space.
 function ensureValidSpaceData(space_data) {
   if ("min_size" in space_data) {
     if (Number.isNaN(space_data.min_size) || space_data.min_size < 0) return "INVALID_MIN_SIZE";
@@ -98,6 +98,7 @@ exports.createSpace = onCall(async ({ data, context }) => {
 });
 
 // Updates space data given space ID and new space data. (space_id, space_data)
+// TODO: Ensure min size is <= max size, even after using updateSpaceData.
 exports.updateSpaceData = onCall(async ({ data, context }) => {
   // Authentication
   const uid = DEV ? DEV_UID : context.auth.uid;
