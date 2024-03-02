@@ -13,6 +13,7 @@ interface SwitchComponentProps {
 }
 
 function CreateSpace() {
+    /*
     const defaultFeatures = {
         "Music":{
             "genres":"",
@@ -34,7 +35,7 @@ function CreateSpace() {
             "hobbies":"",
             "availability":"",
         }
-    }
+    }*/
     // If "Purpose" was selected, get default values from defaultFeatures
 
     const SwitchComponent = ({ switches }: SwitchComponentProps) => {
