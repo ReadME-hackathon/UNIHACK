@@ -3,47 +3,6 @@ const db = require("firebase-admin").firestore();
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, handleParams } = require("../misc/utils");
 
-// A feature's name must uniquely identify it.
-const test_data = {
-  data: {
-    space_data: {
-      name: "Space Sample",
-      min_size: 1,
-      max_size: 3,
-      features: [
-        {
-          name: "numberFeature",
-          type: "NUMBER",
-          optional: false,
-        },
-        {
-          name: "textFeature",
-          type: "STRING",
-          optional: false,
-        },
-        {
-          name: "selectFeature", // aka dropdown
-          type: "SELECT",
-          options: ["option_1", "option_2", "option_3"],
-          optional: false,
-          multi_select: false, // e.g. multiple selections allowed?
-          ordered: false, // e.g. H1, H2a would need to be ordered
-        },
-        {
-          name: "checkboxFeature",
-          type: "CHECKBOX",
-          optional: false,
-        },
-        {
-          name: "availabilityFeature",
-          type: "AVAILABILITY",
-          optional: false,
-        },
-      ],
-    },
-  },
-};
-
 // Ensures a space data is valid. (Doesn't have to be complete)
 // TODO: Ensure feature names are strictly unique within the space.
 function ensureValidSpaceData(space_data) {

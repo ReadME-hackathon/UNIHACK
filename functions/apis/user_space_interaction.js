@@ -3,32 +3,6 @@ const db = require("firebase-admin").firestore();
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams } = require("../misc/utils");
 
-const sampleUserData = {
-  name: "User Sample",
-  features: [
-    {
-      name: "numberFeature",
-      data: 2,
-    },
-    {
-      name: "textFeature",
-      data: "Hi! I am user.",
-    },
-    {
-      name: "selectFeature", // aka dropdown
-      data: ["option2", "option4"],
-    },
-    {
-      name: "checkboxFeature",
-      data: true,
-    },
-    {
-      name: "availabilityFeature",
-      data: null,
-    },
-  ],
-};
-
 // Adds a user to a space along with their user data
 exports.addUserToSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);

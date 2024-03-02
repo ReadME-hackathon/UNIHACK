@@ -3,11 +3,6 @@ const db = require("firebase-admin").firestore();
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, handleParams } = require("../misc/utils");
 
-const sampleGroupData = {
-  name: "Group Sample",
-  description: "Hi, we are a friendly group!",
-};
-
 // Creates a group within a space
 exports.createGroupInSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "group_data"]);
