@@ -1,7 +1,7 @@
 export default interface TutorialCardProps {
   name: string;
   // avatars: string[];
-  size: number;
+  size?: number;
   enrolled: number;
   description: string;
 }

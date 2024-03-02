@@ -32,6 +32,7 @@ export interface SpaceData {
   max_size: number;
   min_size: number;
   name: string;
+  space_id: string;
 }
 
 export interface Space {
