@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 function CreateSpace() {
   const FormComponent = () => {
@@ -43,8 +44,10 @@ function CreateSpace() {
       },
     });
 
+    const navigate = useNavigate();
     // Submit handler
     function onSubmit(values: z.infer<typeof formSchema>) {
+        navigate("/user/edit-space-features", { state: { roomName: values.roomName, teamSize: values.teamSize, purpose: values.purpose } });
         console.log(values);
     }
 
@@ -122,8 +125,8 @@ function CreateSpace() {
   };
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="flex h-screen w-full items-start justify-start ml-24">
+      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">Create a GroupSpace <br/> to help others find  <br/> teammates</h2>
         <FormComponent />
       </div>

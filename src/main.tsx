@@ -18,6 +18,13 @@ import UserLayout from "./layouts/UserLayout/UserLayout";
 import DashboardHome from "./routes/dashboardHome/DashboardHome";
 import Layout from "./layouts/Layout";
 import GroupSpace from "./routes/groupSpace/GroupSpace";
+
+import JoinRoom from "./routes/onboardingPages/onboardingStudent/JoinRoom";
+import ProfileSetup from "./routes/onboardingPages/onboardingStudent/ProfileSetup";
+
+import CreateSpace from "./routes/onboardingPages/onboardingTeacher/CreateSpace";
+import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatures";
+
 import LoadingTeamPage from "./routes/loading/LoadingTeamPage";
 
 const router = createBrowserRouter(
@@ -29,10 +36,17 @@ const router = createBrowserRouter(
         <Route path="joinPlatform" element={<LandingPage />} />
         <Route path="group-space" element={<GroupSpace />} />
         <Route path="loading-team" element={<LoadingTeamPage />} />
-    </Route>
+      </Route>
       <Route path="signIn" element={<SignIn />} />
       <Route path="user" element={<UserLayout />}>
         <Route index element={<DashboardHome />} />
+        <Route path="join-room" element={<JoinRoom />} />
+        <Route path="create-space" element={<CreateSpace />} />
+        <Route path="profile-setup" element={<ProfileSetup />} />
+        <Route path="edit-space-features" element={<SpaceFeatures />} />
+      </Route>
+      <Route path="space" element={<UserLayout />}>
+        <Route path=":spaceId" element={<GroupSpace />} />
       </Route>
     </Route>,
   ]),

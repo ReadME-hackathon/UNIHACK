@@ -43,7 +43,7 @@ const StudentProfile = () => {
     );
   };
   return (
-    <div className="mx-auto flex h-[90vh] justify-center">
+    <div className="w-full flex h-[90vh] justify-start ml-48">
       <div className="mt-10 flex h-4/5 w-6/12 flex-col justify-center gap-10">
         <div className="flex flex-col gap-10">
           <h1 className="text-6xl font-bold">Profile</h1>
