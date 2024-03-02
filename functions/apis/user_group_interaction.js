@@ -2,37 +2,11 @@
 const db = require("firebase-admin").firestore();
 const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
-
-// Create a request when a user request to join a group. The leader can approve or reject this.
-// userRequestGroup(group_id)
-
-// Create a request when a user is invted to a group by the leader. Only the leader can do this.
-// userInvitedToGroup(invitedID, groupID)
-
-// Requests can either be an invitation send by the leader, or a request by a user to a leader's group.
-// processRequestDecision(requestID, approved?)
-
-// Within the group, create a history of join and leaves, with timestamps and a message.
-// userLeaveGroup(userID, groupID, reason)
-
-// userJoinGroup(userID, groupID)
-
-// Finds if a user belongs to a group. Can have no group.
-// Can only be part of one group.
-// getUserGroup(userID, spaceID)
+const { handleAuthAndParams, handleAuth } = require("../misc/utils");
 
 // Create a request when a user requests to join a group. The leader can approve or reject this.
 exports.userRequestGroup = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("group_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing group_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -55,16 +29,7 @@ exports.userRequestGroup = onCall(async ({ data, context }) => {
 
 // Create a request when a user is invited to a group by the leader. Only the leader can do this.
 exports.userInvitedToGroup = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("invited_id" in data) || !("group_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing invited_id or group_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id", "invited_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -96,16 +61,7 @@ exports.userInvitedToGroup = onCall(async ({ data, context }) => {
 
 // Process a request decision (approve or reject)
 exports.processRequestDecision = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("request_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing request_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["request_id"]);
 
   // Retrieve request reference
   const requestRef = db.collection("requests").doc(data.request_id);
@@ -143,16 +99,7 @@ exports.processRequestDecision = onCall(async ({ data, context }) => {
 
 // Within the group, create a history of join and leaves, with timestamps and a message.
 exports.userLeaveGroup = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("group_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing group_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -176,16 +123,7 @@ exports.userLeaveGroup = onCall(async ({ data, context }) => {
 
 // User joins a group
 exports.userJoinGroup = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("group_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing group_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -210,10 +148,7 @@ exports.userJoinGroup = onCall(async ({ data, context }) => {
 // Can only be part of one group.
 exports.getUserGroup = onCall(async ({ data, context }) => {
   // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
+  const uid = handleAuth(data, context);
 
   // Retrieve group reference
   const querySnapshot = await db

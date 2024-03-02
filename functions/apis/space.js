@@ -1,7 +1,7 @@
 const db = require("firebase-admin").firestore();
 
-const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams, handleParams } = require("../misc/utils");
 
 // A feature's name must uniquely identify it.
 const test_data = {
@@ -70,22 +70,7 @@ function ensureCompleteValidSpaceData(space_data) {
 
 // Creates a space given space data. (space_id)
 exports.createSpace = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if ((!"space_data") in data) {
-    throw new HttpsError("invalid-argument", "Missing space_data.");
-  }
-
-  // Checks if the space data is well-formatted
-  const spaceDataError = ensureCompleteValidSpaceData(data.space_data);
-  if (spaceDataError) {
-    throw new HttpsError("invalid-argument", spaceDataError);
-  }
+  const uid = handleAuthAndParams(context, data, ["space_data"]);
 
   // Append to DB
   const spaceRef = await db.collection("Spaces").add({
@@ -100,16 +85,7 @@ exports.createSpace = onCall(async ({ data, context }) => {
 // Updates space data given space ID and new space data. (space_id, space_data)
 // TODO: Ensure min size is <= max size, even after using updateSpaceData.
 exports.updateSpaceData = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data) || !("space_data" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id or space_data.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id", "space_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -139,16 +115,7 @@ exports.updateSpaceData = onCall(async ({ data, context }) => {
 
 // Deletes a space given its ID (space_id)
 exports.deleteSpace = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -176,11 +143,7 @@ exports.deleteSpace = onCall(async ({ data, context }) => {
 
 // Retrieves spaces created by a given user ()
 exports.getTeacherSpaces = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
+  const uid = handleAuthAndParams(context, data, []);
 
   // Retrieve spaces created by the user
   const snapshot = await db.collection("Spaces").where("created_by", "==", uid).get();
@@ -194,4 +157,23 @@ exports.getTeacherSpaces = onCall(async ({ data, context }) => {
   });
 
   return { spaces };
+});
+
+// Get space data by space ID
+exports.getSpaceData = onCall(async ({ data, context }) => {
+  handleParams(data, ["space_id"]);
+
+  // Retrieve space reference
+  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceSnapshot = await spaceRef.get();
+
+  // Check if space exists
+  if (!spaceSnapshot.exists) {
+    throw new HttpsError("not-found", "Space does not exist. (ID: " + data.space_id + ").");
+  }
+
+  // Get space data
+  const spaceData = spaceSnapshot.data();
+
+  return { space: spaceData };
 });

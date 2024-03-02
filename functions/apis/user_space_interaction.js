@@ -2,6 +2,7 @@
 const db = require("firebase-admin").firestore();
 const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams } = require("../misc/utils");
 
 const sampleUserData = {
   name: "User Sample",
@@ -31,16 +32,7 @@ const sampleUserData = {
 
 // Adds a user to a space along with their user data
 exports.addUserToSpace = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data) || !("user_data" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id or user_data.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -59,16 +51,7 @@ exports.addUserToSpace = onCall(async ({ data, context }) => {
 
 // Removes a user from a space
 exports.removeUserFromSpace = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -87,16 +70,7 @@ exports.removeUserFromSpace = onCall(async ({ data, context }) => {
 
 // Updates user data in a space
 exports.updateUserSpaceData = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data) || !("user_data" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id or user_data.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -111,4 +85,31 @@ exports.updateUserSpaceData = onCall(async ({ data, context }) => {
   await spaceRef.collection("users").doc(uid).update(data.user_data);
 
   return { success: true };
+});
+
+// List all users within a space
+exports.listUsersInSpace = onCall(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
+
+  // Retrieve space reference
+  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceSnapshot = await spaceRef.get();
+
+  // Check if space exists
+  if (!spaceSnapshot.exists) {
+    throw new HttpsError("not-found", "Space does not exist. (ID: " + data.space_id + ").");
+  }
+
+  // Retrieve users within the space
+  const usersQuerySnapshot = await spaceRef.collection("users").get();
+
+  const users = [];
+  usersQuerySnapshot.forEach((doc) => {
+    users.push({
+      user_id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  return { users };
 });

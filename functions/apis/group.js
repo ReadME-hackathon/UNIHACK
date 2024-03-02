@@ -2,6 +2,7 @@
 const db = require("firebase-admin").firestore();
 const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams, handleParams } = require("../misc/utils");
 
 const sampleGroupData = {
   name: "Group Sample",
@@ -10,16 +11,7 @@ const sampleGroupData = {
 
 // Creates a group within a space
 exports.createGroupInSpace = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("space_id" in data) || !("group_data" in data)) {
-    throw new HttpsError("invalid-argument", "Missing space_id or group_data.");
-  }
+  const uid = handleAuthAndParams(context, data, ["space_id", "group_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("Spaces").doc(data.space_id);
@@ -45,16 +37,7 @@ exports.createGroupInSpace = onCall(async ({ data, context }) => {
 
 // Removes a group
 exports.removeGroup = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("group_id" in data)) {
-    throw new HttpsError("invalid-argument", "Missing group_id.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -79,16 +62,7 @@ exports.removeGroup = onCall(async ({ data, context }) => {
 
 // Updates group data
 exports.updateGroupData = onCall(async ({ data, context }) => {
-  // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
-  }
-
-  // Parameters check
-  if (!("group_id" in data) || !("group_data" in data)) {
-    throw new HttpsError("invalid-argument", "Missing group_id or group_data.");
-  }
+  const uid = handleAuthAndParams(context, data, ["group_id", "group_data"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -109,4 +83,23 @@ exports.updateGroupData = onCall(async ({ data, context }) => {
   await groupRef.update(data.group_data);
 
   return { success: true };
+});
+
+// Get group data by group ID
+exports.getGroupData = onCall(async ({ data, context }) => {
+  handleParams(data, ["group_id"]);
+
+  // Retrieve group reference
+  const groupRef = db.collection("groups").doc(data.group_id);
+  const groupSnapshot = await groupRef.get();
+
+  // Check if group exists
+  if (!groupSnapshot.exists) {
+    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
+  }
+
+  // Get group data
+  const groupData = groupSnapshot.data();
+
+  return { group: groupData };
 });
