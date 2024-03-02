@@ -48,29 +48,34 @@ const test_data = {
 // TODO: Ensure feature names are strictly unique within the space.
 function ensureValidSpaceData(space_data) {
   if ("min_size" in space_data) {
-    if (Number.isNaN(space_data.min_size) || space_data.min_size < 0) return "INVALID_MIN_SIZE";
+    if (Number.isNaN(space_data.min_size) || space_data.min_size < 0) {
+      throw new HttpsError("invalid-argument", "INVALID_MIN_SIZE");
+    }
   }
 
   if ("max_size" in space_data && Number.isNaN(space_data.max_size)) {
-    return "INVALID_MAX_SIZE";
+    throw new HttpsError("invalid-argument", "INVALID_MAX_SIZE");
   }
   return null;
 }
 
 // Ensures a space data is complete and valid. Returns the error if something is wrong.
 function ensureCompleteValidSpaceData(space_data) {
-  if (!("name" in space_data)) return "NAME_MISSING";
-  if (!("min_size" in space_data) || !("max_size" in space_data)) return "MIN_OR_MAX_SIZE_MISSING";
+  if (!("name" in space_data)) {
+    throw new HttpsError("invalid-argument", "Missing 'name' in space_data.");
+  }
+  if (!("min_size" in space_data) || !("max_size" in space_data)) {
+    throw new HttpsError("invalid-argument", "Missing 'min_size' or 'max_size' in space_data.");
+  }
 
-  const validityError = ensureValidSpaceData(space_data);
-  if (validityError) return validityError;
-
-  return null;
+  ensureValidSpaceData(space_data);
 }
 
 // Creates a space given space data. (space_id)
 exports.createSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_data"]);
+
+  ensureCompleteValidSpaceData(data.space_data);
 
   // Append to DB
   const spaceRef = await db.collection("Spaces").add({
@@ -160,7 +165,7 @@ exports.getTeacherSpaces = onCall(async ({ data, context }) => {
 });
 
 // Get space data by space ID
-exports.getSpaceData = onCall(async ({ data, context }) => {
+exports.getSpaceData = onCall(async ({ data }) => {
   handleParams(data, ["space_id"]);
 
   // Retrieve space reference
