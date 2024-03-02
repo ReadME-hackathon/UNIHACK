@@ -1,4 +1,5 @@
-const { HttpsError } = require("firebase-functions/v2/https");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const functions = require("firebase-functions");
 
 // When true, DEV_UID is used to authenticate
 const DEV = true;
@@ -31,4 +32,12 @@ function handleParams(data, requiredParams) {
   }
 }
 
-module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth };
+// Wrapper function to configure CORS options for callable functions
+function callableWithCORS(handler) {
+  const corsEnabledOptions = { cors: true }; // Enable CORS
+  return functions.region("your-region").https.onCall(corsEnabledOptions, async (data, context) => {
+    return handler(data, context);
+  });
+}
+
+module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth, callableWithCORS };
