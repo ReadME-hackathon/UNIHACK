@@ -1,11 +1,10 @@
-// When true, DEV_UID is used to authenticate
-const DEV = true;
-// User ID used for auth during development
-const DEV_UID = "1P1go8lxq9NI16C8SgLQEZAfMKO2";
+const admin = require("firebase-admin");
+admin.initializeApp();
 
-module.exports = { DEV, DEV_UID };
-
-// Functions related to spaces.
+// Exporting all the functions
 module.exports = {
-  ...require("./apis/spaces.js"),
+  ...require("./apis/group.js"),
+  ...require("./apis/space"),
+  ...require("./apis/user_group_interaction"),
+  ...require("./apis/user_space_interaction"),
 };
