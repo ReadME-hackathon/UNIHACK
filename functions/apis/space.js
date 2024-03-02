@@ -1,6 +1,5 @@
 const db = require("firebase-admin").firestore();
-
-const { HttpsError } = require("firebase-functions/v2/https");
+const { HttpsError, onCall } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, handleParams, onCallWrapper } = require("../misc/utils");
 
 // Ensures a space data is valid. (Doesn't have to be complete)
@@ -31,8 +30,11 @@ function ensureCompleteValidSpaceData(space_data) {
 }
 
 // Creates a space given space data. (space_id)
-exports.createSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_data"]);
+
+exports.createSpace = onCall({ cors: true }, async ({ data }) => {
+  console.log(data);
+  // const uid = handleAuthAndParams(context, data, ["space_data"]);
+  const uid = data.uid;
 
   ensureCompleteValidSpaceData(data.space_data);
 

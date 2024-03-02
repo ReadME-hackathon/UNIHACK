@@ -1,5 +1,6 @@
 import { createNewSpace } from "@/services/spacesServices";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CreateSpace() {
   return (
@@ -15,6 +16,7 @@ function CreateSpace() {
 }
 
 const RoomForm = () => {
+  const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
   const [minTeamSize, setMinTeamSize] = useState<number>(1);
   const [maxTeamSize, setMaxTeamSize] = useState<number>(1);
@@ -46,6 +48,11 @@ const RoomForm = () => {
       minSize: minTeamSize,
       maxSize: maxTeamSize,
       features: defaultFeatures,
+    }).then((result) => {
+      const link = (result.data as { space_id: string }).space_id;
+      if (result) {
+        navigate(`/app/${link}`);
+      }
     });
   };
 

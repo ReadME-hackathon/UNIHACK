@@ -2,6 +2,7 @@
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { isLoggedIn } from "./firestoreServices";
 import { CreateNewSpace } from "./models";
+import { auth } from "../firebase";
 
 const functions = getFunctions();
 
@@ -70,15 +71,19 @@ export async function createNewSpace(data: CreateNewSpace) {
       functions,
       "createSpace",
     )({
-      name: data.roomName,
-      min_size: data.minSize,
-      max_size: data.maxSize,
-      features: data.features,
+      space_data: {
+        name: data.roomName,
+        min_size: data.minSize,
+        max_size: data.maxSize,
+        features: data.features,
+      },
+      uid: auth.currentUser?.uid,
     });
 
-    console.log("DONEW");
+    console.log("DONE");
     return result;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
