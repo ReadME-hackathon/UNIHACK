@@ -169,7 +169,7 @@ exports.getSpaceData = onCall(async ({ data }) => {
   handleParams(data, ["space_id"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
