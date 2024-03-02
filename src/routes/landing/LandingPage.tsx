@@ -25,9 +25,9 @@ const LandingPage = () => {
   return (
     <div className="max-w-screen-lg m-auto mb-10">
       <HeroBanner />
-      <div className="flex flex-col gap-10 w-[900px] rounded-[6px] pt-8 pb-32 mt-14 mx-auto bg-gray-200">
+      <div className="flex flex-col gap-10 w-[900px] rounded-[6px] pt-8 pb-32 mt-14 mx-auto bg-neutral-200">
         <LandingBar />
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-6 mt-4">
           <h2 className="text-6xl font-bold text-center">Big title text</h2>
           <p className="w-[350px] h-24 mb-10 font-medium text-center">Body Text that describes something and makes the product look like something that people will actually use.</p>
         </div>
