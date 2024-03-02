@@ -7,6 +7,23 @@ const admin = require("firebase-admin");
 //   },
 // };
 
+// // createGroupInSpace(leaderID, spaceID, groupData)
+// exports.groups = groups.createGroupInSpace;
+// // removeGroup(groupID)
+// exports.groups = groups.removeGroup;
+// // updateGroupData(groupID, groupData)
+// exports.groups = groups.updateGroupData;
+
+const sampleGroupData = {
+  name: "Group Sample",
+  privacy: "private",
+  attributesRequirement: {
+    gradeTarget: {
+      min: 80,
+    },
+  },
+};
+
 exports.createGroup = functions.https.onCall(async (data, context) => {
   try {
     const { spaceId, groupName, userIds } = data;
