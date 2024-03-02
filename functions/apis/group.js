@@ -3,10 +3,9 @@ const db = require("firebase-admin").firestore();
 const { HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, handleParams, onCallWrapper } = require("../misc/utils");
 
-
 // Creates a group within a space
-exports.createGroupInSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "group_data"]);
+exports.createGroupInSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "group_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -30,8 +29,8 @@ exports.createGroupInSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Removes a group
-exports.removeGroup = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id"]);
+exports.removeGroup = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -55,8 +54,8 @@ exports.removeGroup = onCallWrapper(async ({ data, context }) => {
 });
 
 // Updates group data
-exports.updateGroupData = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id", "group_data"]);
+exports.updateGroupData = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["group_id", "group_data"]);
 
   // Retrieve group reference
   const groupRef = db.collection("groups").doc(data.group_id);
@@ -80,7 +79,7 @@ exports.updateGroupData = onCallWrapper(async ({ data, context }) => {
 });
 
 // Get group data by group ID
-exports.getGroupData = onCallWrapper(async ({ data, context }) => {
+exports.getGroupData = onCallWrapper(async ({ data }) => {
   handleParams(data, ["space_id", "group_id"]);
 
   // Retrieve group reference
