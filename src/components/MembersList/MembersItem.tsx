@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HoverCard } from "@/components/ui/hover-card";
 
 const MembersItem = ({ photoUrl, name, status, description }: MembersItemModel) => {
+  console.log(description)
   return (
     <HoverCard>
         <div className="flex h-16 w-full flex-row items-center gap-4 rounded bg-white p-4 shadow-sm transition-all hover:shadow-md">
