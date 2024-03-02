@@ -6,20 +6,19 @@ const DEV = false;
 const DEV_UID = "1P1go8lxq9NI16C8SgLQEZAfMKO2";
 
 // Function to handle authentication and parameter checking
-function handleAuthAndParams(context, data, requiredParams) {
-  const uid = handleAuth(data, context);
+function handleAuthAndParams(data, requiredParams) {
+  const uid = handleAuth(data);
   handleParams(data, requiredParams);
   return uid;
 }
 
-function handleAuth(data, context) {
+function handleAuth(data) {
   // Authentication
-  const uid = DEV ? DEV_UID : context.auth.uid;
-  if (!uid) {
-    throw new HttpsError("unauthenticated", "Not authed.");
+  if (!("uid" in data)) {
+    throw new HttpsError("unauthenticated", "User id is missing.");
   }
 
-  return uid;
+  return data.uid;
 }
 
 function handleParams(data, requiredParams) {
