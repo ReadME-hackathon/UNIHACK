@@ -25,7 +25,7 @@ const LandingPage = () => {
   return (
     <div className="max-w-screen-lg m-auto mb-10">
       <HeroBanner />
-      <div className="flex flex-col gap-10 pt-8 pb-32 rounded-xl bg-gray-200">
+      <div className="flex flex-col gap-10 pt-8 pb-32 rounded-[6px] bg-gray-200">
         <LandingBar />
         <div className="flex flex-col items-center gap-6">
           <h2 className="text-6xl font-bold text-center">Big title text</h2>
