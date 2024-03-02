@@ -11,15 +11,15 @@ const UserSpaceView = () => {
   const [spaceData, setSpaceData] = useState<Space>();
 
   // Gets the space ID
-  let { spaceId } = useParams();
+  let { space_id } = useParams();
 
   // When page initially loads
   useEffect(() => {
-    if (!spaceId) {
-      spaceId = "";
+    if (!space_id) {
+      space_id = "";
     }
 
-    getSpaceData(spaceId)
+    getSpaceData(space_id)
       .then((result) => {
         console.log(result);
         setSpaceData(result?.data as Space);

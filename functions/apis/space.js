@@ -146,6 +146,7 @@ exports.getSpaceData = onCallWrapper(async ({ data }) => {
   handleParams(data, ["space_id"]);
 
   // Retrieve space reference
+  console.log(data.space_id);
   const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 

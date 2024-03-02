@@ -1,137 +1,106 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { createNewSpace } from "@/services/spacesServices";
+import { useState } from "react";
 
 function CreateSpace() {
-  const FormComponent = () => {
-
-    const formSchema = z.object({
-      roomName: z.string().min(2, {
-        message: "Please enter a valid name.",
-      }),
-      teamSize: z.string().min(2, {
-        message: "Please enter a valid goal",
-      }),
-      purpose: z.string().min(0, {
-        message: "Please enter a valid goal",
-      }),
-    });
-
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        roomName: "",
-        teamSize: "",
-        purpose: "",
-      },
-    });
-
-    const navigate = useNavigate();
-    // Submit handler
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        navigate("/user/edit-space-features", { state: { roomName: values.roomName, teamSize: values.teamSize, purpose: values.purpose } });
-        console.log(values);
-    }
-
-    return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-          <FormField
-            control={form.control}
-            name="roomName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>GroupSpace name</FormLabel>
-                <FormControl>
-                  <Input className="w-1/2 border-none bg-orange-100" placeholder="" {...field} />
-                </FormControl>
-                <FormMessage className="absolute" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="teamSize"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Team Size</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-1/2 border-none bg-orange-100">
-                      <SelectValue className="text-sm" placeholder="Select a goal." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="z-10 bg-white">
-                    <SelectItem className="hover:cursor-pointer" value="H1">2</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H2">3</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H3">4</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Pass">Pass</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="absolute"/>
-              </FormItem>
-            )}
-          />
-        <FormField
-            control={form.control}
-            name="purpose"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Purpose (Optional)</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-1/2 border-none bg-orange-100">
-                      <SelectValue className="text-sm" placeholder="Select a goal." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="z-10 bg-white">
-                    <SelectItem className="hover:cursor-pointer" value="Educational">Educational</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Fitness">Fitness</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Gaming">Gaming</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Music">Music</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage className="absolute"/>
-              </FormItem>
-            )}
-          />
-          <Button
-            className="w-fit rounded bg-orange-500 text-white hover:bg-orange-500"
-            type="submit"
-          >
-            Continue
-          </Button>
-        </form>    
-      </Form>
-    );
-  };
-
   return (
-    <div className="flex h-screen w-full items-start justify-start ml-24">
-      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
-        <h2 className="text-6xl font-bold leading-snug">Create a GroupSpace <br/> to help others find  <br/> teammates</h2>
-        <FormComponent />
+    <div className="ml-24 flex h-screen w-full items-start justify-start">
+      <div className="flex h-5/6 w-3/4 flex-col justify-center gap-10 xl:w-1/2">
+        <h2 className="text-6xl font-bold leading-snug">
+          Create a GroupSpace to help others find teammates
+        </h2>
+        <RoomForm />
       </div>
     </div>
   );
 }
+
+const RoomForm = () => {
+  const [roomName, setRoomName] = useState("");
+  const [minTeamSize, setMinTeamSize] = useState<number>(1);
+  const [maxTeamSize, setMaxTeamSize] = useState<number>(1);
+
+  const defaultFeatures = [
+    {
+      name: "academic year",
+      type: "SELECT",
+      options: ["First Year", "Second Year", "Third Year", "Fourth Year"],
+      optional: false,
+    },
+    {
+      name: "target score",
+      type: "SELECT",
+      options: ["H1", "H2", "H3", "H4"],
+      optional: false,
+    },
+    {
+      name: "schedule",
+      type: "AVAILABILITY",
+    },
+  ];
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    createNewSpace({
+      roomName: roomName,
+      minSize: minTeamSize,
+      maxSize: maxTeamSize,
+      features: defaultFeatures,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-8 max-w-md">
+      <div className="mb-4">
+        <label htmlFor="roomName" className="block text-gray-700">
+          Room Name:
+        </label>
+        <input
+          type="text"
+          id="roomName"
+          value={roomName}
+          onChange={(e) => setRoomName(e.target.value)}
+          required
+          className="w-full rounded bg-orange-100 px-4 py-2 focus:border focus:border-orange-500 focus:outline-none"
+        />
+      </div>
+      <div className="flex flex-row gap-4">
+        <div className="mb-4 w-1/2">
+          <label htmlFor="minTeamSize" className="block text-gray-700">
+            Min Team Size:
+          </label>
+          <input
+            type="number"
+            id="minTeamSize"
+            value={minTeamSize}
+            onChange={(e) => setMinTeamSize(parseInt(e.target.value))}
+            required
+            className="w-full rounded bg-orange-100 px-4 py-2 focus:border focus:border-orange-500 focus:outline-none"
+          />
+        </div>
+        <div className="mb-4 w-1/2">
+          <label htmlFor="maxTeamSize" className="block text-gray-700">
+            Max Team Size:
+          </label>
+          <input
+            type="number"
+            id="maxTeamSize"
+            value={maxTeamSize}
+            onChange={(e) => setMaxTeamSize(parseInt(e.target.value))}
+            required
+            className="w-full rounded bg-orange-100 px-4 py-2 focus:border focus:border-orange-500 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full rounded bg-orange-500 px-4 py-2 text-white transition duration-200 hover:bg-orange-600"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
 
 export default CreateSpace;

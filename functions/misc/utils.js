@@ -33,7 +33,7 @@ function handleParams(data, requiredParams) {
 
 // Wrapper function to configure CORS options for callable functions
 function onCallWrapper(handler) {
-  return onCall({ cors: true, region: "australia-southeast2" }, handler);
+  return onCall({ cors: true }, handler);
 }
 
 module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth, onCallWrapper };

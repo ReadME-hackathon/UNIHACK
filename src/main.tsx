@@ -24,7 +24,7 @@ import JoinRoom from "./routes/onboardingPages/onboardingStudent/JoinRoom";
 import ProfileSetup from "./routes/onboardingPages/onboardingStudent/ProfileSetup";
 
 import CreateSpace from "./routes/onboardingPages/onboardingTeacher/CreateSpace";
-import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatures";
+// import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatures";
 
 import { AuthProvider } from "@/auth/AuthContext.tsx";
 import { AuthenticatedElement, UnauthenticatedElement } from "@/auth/AuthElements.tsx";
@@ -36,6 +36,7 @@ export const URLs = {
   edit_space: "edit_space",
   edit_profile: "edit_profile",
   create_space: "create_space",
+  space_features: "space-features",
   join_space: "join_space",
   requests: "requests",
 };
@@ -53,11 +54,12 @@ const router = createBrowserRouter(
 
         <Route path=":space_id">
           <Route index element={<UserSpaceView />} />
-          <Route path={URLs.edit_space} element={<SpaceFeatures />} />
+          {/* <Route path={URLs.edit_space} element={<SpaceFeatures />} /> */}
           <Route path={URLs.edit_profile} element={<ProfileSetup />} />
         </Route>
 
         <Route path={URLs.create_space} element={<CreateSpace />} />
+        {/* <Route path={URLs.space_features} element={<SpaceFeatures />} /> */}
         <Route path={URLs.join_space} element={<JoinRoom />} />
         <Route path={URLs.requests} element={<Requests />} />
       </Route>
