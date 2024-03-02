@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { URLs } from "@/main.tsx";
 
 const HeroBanner = () => {
   return (
@@ -15,13 +16,13 @@ const HeroBanner = () => {
           asChild
           className=" h-12 rounded-[4px] bg-orange-500 px-8 text-lg font-bold text-white shadow-[0_4px_6px_-1px_rgba(249,115,22,0.3)] shadow-inner hover:bg-neutral-100 hover:text-orange-500"
         >
-          <Link to="/createPlatform">Create Space</Link>
+          <Link to={`/${URLs.app}/${URLs.create_space}`}>Create Space</Link>
         </Button>
         <Button
           asChild
           className="h-12 rounded-[4px] bg-indigo-600 px-10 text-lg font-bold text-white shadow-[0_4px_6px_-1px_rgba(79,70,229,0.3)] shadow-inner hover:bg-neutral-100 hover:text-indigo-600"
         >
-          <Link to="/joinPlatform">Join Space</Link>
+          <Link to={`/${URLs.app}/${URLs.join_space}`}>Join Space</Link>
         </Button>
       </div>
     </div>
