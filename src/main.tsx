@@ -29,30 +29,30 @@ import ProfileSetup from "./routes/onboardingPages/onboardingStudent/ProfileSetu
 import CreateSpace from "./routes/onboardingPages/onboardingTeacher/CreateSpace";
 import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatures";
 
-import LoadingTeamPage from "./routes/loading/LoadingTeamPage";
+import { AuthProvider } from "@/auth/AuthContext.tsx";
+import { AuthenticatedElement, UnauthenticatedElement } from "@/auth/AuthElements.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<Layout />}>
-      <Route path="" element={<PublicLayout />}>
+      <Route path="/" element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path="createPlatform" element={<LandingPage />} />
-        <Route path="joinPlatform" element={<LandingPage />} />
-        <Route path="loading-team" element={<LoadingTeamPage />} />
+        <Route path="signIn" element={<UnauthenticatedElement element={<SignIn />} />} />
       </Route>
-      <Route path="signIn" element={<SignIn />} />
 
-      <Route path="user" element={<UserLayout />}>
+      <Route path="user" element={<AuthenticatedElement element={<UserLayout />} />}>
         <Route index element={<DashboardHome />} />
+
         <Route path="space/*">
           <Route index element={<UserMySpaces />} />
-          <Route path=":spaceId" element={<UserSpaceView/>} />
+          <Route path=":spaceId" element={<UserSpaceView />} />
         </Route>
+
         <Route path="join-room" element={<JoinRoom />} />
         <Route path="profile-setup" element={<ProfileSetup />} />
       </Route>
 
-      <Route path="admin" element={<UserLayout />}>
+      <Route path="admin" element={<AuthenticatedElement element={<UserLayout />} />}>
         <Route index element={<DashboardHome />} />
         <Route path="space/*">
           <Route index element={<AdminMySpaces />} />
@@ -68,6 +68,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} /> 
-  </React.StrictMode>,       
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </React.StrictMode>,
 );
