@@ -6,8 +6,8 @@ const { HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, onCallWrapper } = require("../misc/utils");
 
 // Create a request when a user requests to join a group. The leader can approve or reject this.
-exports.userRequestToJoinGroup = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id", "space_id"]);
+exports.userRequestToJoinGroup = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["group_id", "space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -45,9 +45,9 @@ exports.userRequestToJoinGroup = onCallWrapper(async ({ data, context }) => {
 });
 
 // Create a request when a user is invited to a group by the leader. Only the leader can do this.
-exports.userInvitedToGroup = onCallWrapper(async ({ data, context }) => {
+exports.userInvitedToGroup = onCallWrapper(async ({ data }) => {
   // Authentication
-  const uid = handleAuthAndParams(context, data, ["group_id", "invited_id", "space_id"]);
+  const uid = handleAuthAndParams(data, ["group_id", "invited_id", "space_id"]);
 
   // Extract necessary data
   const { group_id, invited_id, space_id } = data;
@@ -79,9 +79,9 @@ exports.userInvitedToGroup = onCallWrapper(async ({ data, context }) => {
 });
 
 // Either accept the request or remove the request (decline).
-exports.processRequestDecision = onCallWrapper(async ({ data, context }) => {
+exports.processRequestDecision = onCallWrapper(async ({ data }) => {
   // Validate input parameters
-  const uid = handleAuthAndParams(context, data, ["request_id", "approved", "space_id"]);
+  const uid = handleAuthAndParams(data, ["request_id", "approved", "space_id"]);
 
   // Retrieve request data
   const { request_id, approved, space_id } = data;
@@ -133,9 +133,9 @@ exports.processRequestDecision = onCallWrapper(async ({ data, context }) => {
   return { success: true };
 });
 
-exports.userLeaveGroup = onCallWrapper(async ({ data, context }) => {
+exports.userLeaveGroup = onCallWrapper(async ({ data }) => {
   // Authentication
-  const uid = handleAuthAndParams(context, data, ["space_id", "group_id"]);
+  const uid = handleAuthAndParams(data, ["space_id", "group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection(`spaces/${data.space_id}/groups`).doc(data.group_id);
@@ -155,8 +155,8 @@ exports.userLeaveGroup = onCallWrapper(async ({ data, context }) => {
 });
 
 // Kicks a user from a group
-exports.kickUserFromGroup = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "group_id", "kicked_user_id"]);
+exports.kickUserFromGroup = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "group_id", "kicked_user_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection(`spaces/${data.space_id}/groups`).doc(data.group_id);
@@ -182,9 +182,9 @@ exports.kickUserFromGroup = onCallWrapper(async ({ data, context }) => {
 });
 
 // Finds if a user belongs to a group. Can have no group.
-exports.getUserGroup = onCallWrapper(async ({ data, context }) => {
+exports.getUserGroup = onCallWrapper(async ({ data }) => {
   // Authentication
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+  const uid = handleAuthAndParams(data, ["space_id"]);
 
   // Retrieve group reference
   const querySnapshot = await db
@@ -215,8 +215,8 @@ exports.getUserGroup = onCallWrapper(async ({ data, context }) => {
   };
 });
 
-exports.getUserRequests = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+exports.getUserRequests = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id"]);
 
   // Retrieve requests relevant to the user
   const requestsRef = db.collection(`spaces/${data.space_id}/requests`);
