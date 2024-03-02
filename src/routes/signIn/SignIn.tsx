@@ -1,14 +1,10 @@
 import { signInWithGoogle } from "@/services/firestoreServices";
-import { useNavigate } from "react-router-dom";
 import "./SignIn.css";
 
 const SignIn = () => {
-  const navigate = useNavigate();
-
   const signIn = async () => {
     try {
       await signInWithGoogle();
-      navigate("/user");
     } catch (error) {
       console.log("Error signing in with google:", error);
     }
