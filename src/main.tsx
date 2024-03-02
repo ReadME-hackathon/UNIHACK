@@ -28,12 +28,12 @@ const router = createBrowserRouter(
         <Route path="createPlatform" element={<LandingPage />} />
         <Route path="joinPlatform" element={<LandingPage />} />
         <Route path="group-space" element={<GroupSpace />} />
+        <Route path="loading-team" element={<LoadingTeamPage />} />
     </Route>
       <Route path="signIn" element={<SignIn />} />
       <Route path="user" element={<UserLayout />}>
         <Route index element={<DashboardHome />} />
       </Route>
-      <Route path="loading-team" element={<LoadingTeamPage />} />
     </Route>,
   ]),
 );
