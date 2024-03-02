@@ -17,7 +17,7 @@ const MembersItem = ({ photoUrl, name, status, description }: MembersItemModel) 
         </div>
       </HoverCardTrigger>
       <HoverCardContent className=" backdrop-blur-sm">
-        <div> This is a test feature</div>
+        <div> This is a test feature {description.summary}</div>
       </HoverCardContent>
     </HoverCard>
   );
