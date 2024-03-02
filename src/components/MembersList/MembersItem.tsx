@@ -7,7 +7,7 @@ const MembersItem = ({ photoUrl, name, status, description }: MembersItemModel) 
   return (
     <HoverCard>
       <HoverCardTrigger>
-        <div className="flex h-16 w-full flex-row items-center gap-4 rounded bg-white p-4 shadow-sm transition-all hover:shadow-md">
+        <div className="flex h-16 w-full flex-row items-center gap-4 rounded bg-white py-4 pl-4 pr-8 shadow-sm transition-all hover:shadow-md">
           <Avatar>
             <AvatarImage src={photoUrl} />
             <AvatarFallback>CN</AvatarFallback>

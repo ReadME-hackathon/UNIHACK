@@ -139,5 +139,23 @@ exports.getSpaceData = onCall(async ({ data }) => {
   // Get space data
   const spaceData = spaceSnapshot.data();
 
-  return { space: spaceData };
+  // Retrieve subcollections within the space document
+  const subcollections = await spaceRef.listCollections();
+
+  // Create an object to hold subcollection data
+  const subcollectionData = {};
+
+  // Fetch data for each subcollection
+  for (const subcollection of subcollections) {
+    const documents = await subcollection.get();
+    subcollectionData[subcollection.id] = documents.docs.map((doc) => doc.data());
+  }
+
+  // Combine space data with subcollection data
+  const responseData = {
+    space: spaceData,
+    subcollections: subcollectionData,
+  };
+
+  return responseData;
 });

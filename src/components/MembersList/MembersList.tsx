@@ -1,20 +1,29 @@
 import MembersItem from "./MembersItem";
+import { SpaceUser } from "@/services/models";
 
 interface props {
-  spaceId: string;
+  spaceUser: SpaceUser[];
 }
 
-const MembersList = ({ spaceId }: props) => {
-  console.log(spaceId);
+const MembersList = ({ spaceUser }: props) => {
+  if (!spaceUser || !Array.isArray(spaceUser)) {
+    // Return null or an appropriate fallback component
+    return null; // or <div>No members available</div>
+  }
+
   return (
     <div className="flex w-full flex-col rounded bg-neutral-100 p-8">
       <h3 className="mb-4 text-2xl font-bold">Members</h3>
-      <MembersItem
-        name="Leo"
-        photoUrl="https://github.com/shadcn.png"
-        status="Full"
-        description={{ summary: "hi" }}
-      ></MembersItem>
+      <div className="flex flex-col gap-4 ">
+        {spaceUser.map((value) => (
+          <MembersItem
+            name={value.name}
+            photoUrl={value.user_id}
+            status="Full"
+            description={{ summary: "hi" }}
+          ></MembersItem>
+        ))}
+      </div>
     </div>
   );
 };
