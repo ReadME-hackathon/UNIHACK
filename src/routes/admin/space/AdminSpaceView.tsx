@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
-const GroupSpace = () => {
+const AdminSpaceView = () => {
   const tutorialData: TutorialCardProps[] = [
     {
       name: "Tutorial 01",
@@ -94,4 +94,4 @@ const GroupSpace = () => {
   );
 };
 
-export default GroupSpace;
+export default AdminSpaceView;
