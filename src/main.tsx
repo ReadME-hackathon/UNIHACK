@@ -16,17 +16,20 @@ import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import SignIn from "./routes/signIn/SignIn";
 import UserLayout from "./layouts/UserLayout/UserLayout";
 import DashboardHome from "./routes/dashboardHome/DashboardHome";
+import Layout from "./layouts/Layout";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
-    <Route path="/" element={<PublicLayout />}>
-      <Route index element={<LandingPage />} />
-      <Route path="createPlatform" element={<LandingPage />} />
-      <Route path="joinPlatform" element={<LandingPage />} />
-    </Route>,
-    <Route path="signIn" element={<SignIn />} />,
-    <Route path="user" element={<UserLayout />}>
-      <Route index element={<DashboardHome />} />
+    <Route path="/" element={<Layout />}>
+      <Route path="" element={<PublicLayout />}>
+        <Route index element={<LandingPage />} />
+        <Route path="createPlatform" element={<LandingPage />} />
+        <Route path="joinPlatform" element={<LandingPage />} />
+      </Route>
+      <Route path="signIn" element={<SignIn />} />
+      <Route path="user" element={<UserLayout />}>
+        <Route index element={<DashboardHome />} />
+      </Route>
     </Route>,
   ]),
 );
