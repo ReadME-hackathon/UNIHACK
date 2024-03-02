@@ -16,10 +16,26 @@ exports.userRequestGroup = onCall(async ({ data, context }) => {
     throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
   }
 
+  // Get the ID of the leader from the group Snapshot
+  const leader_id = groupSnapshot.data().leader_id;
+
+  // Check if there's already an existing request to the same group or leader
+  const existingRequests = await groupRef
+    .collection("requests")
+    .where("from_id", "==", uid)
+    .where("target_group_id", "==", data.group_id)
+    .get();
+
+  if (!existingRequests.empty) {
+    throw new HttpsError("already-exists", "There is already a request to join this group.");
+  }
+
   // Add request to the group
-  await groupRef.collection("requests").doc(uid).set({
-    user_id: uid,
-    status: "pending",
+  await groupRef.collection("requests").add({
+    from_id: uid,
+    to_id: leader_id,
+    target_group_id: data.group_id,
+    type: "REQUEST_TO_JOIN",
     timestamp: Date.now(),
   });
 
