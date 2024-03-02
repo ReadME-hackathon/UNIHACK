@@ -16,6 +16,7 @@ import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import SignIn from "./routes/signIn/SignIn";
 import UserLayout from "./layouts/UserLayout/UserLayout";
 import DashboardHome from "./routes/dashboardHome/DashboardHome";
+import GroupSpace from "./routes/groupSpace/GroupSpace";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route index element={<LandingPage />} />
       <Route path="createPlatform" element={<LandingPage />} />
       <Route path="joinPlatform" element={<LandingPage />} />
+      <Route path="group-space" element={<GroupSpace />} />
     </Route>,
     <Route path="signIn" element={<SignIn />} />,
     <Route path="user" element={<UserLayout />}>
