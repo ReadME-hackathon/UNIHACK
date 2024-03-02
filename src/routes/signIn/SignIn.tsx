@@ -8,7 +8,7 @@ const SignIn = () => {
   const signIn = async () => {
     try {
       await signInWithGoogle();
-      navigate("/");
+      navigate("/user");
     } catch (error) {
       console.log("Error signing in with google:", error);
     }
