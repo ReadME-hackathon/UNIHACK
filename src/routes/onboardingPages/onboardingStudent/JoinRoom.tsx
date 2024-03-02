@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useNavigate } from 'react-router-dom';
 
 function JoinRoom() {
 
@@ -28,10 +29,13 @@ function JoinRoom() {
         roomCode: "",
       },
     })
-   
+    const navigate = useNavigate();
     // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values)
+      navigate("/profileSetup")
+      // Handle room number authentication
+
     }
 
     return(
