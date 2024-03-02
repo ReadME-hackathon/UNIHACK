@@ -91,7 +91,10 @@ function ProfileSetup() {
 
     return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className={`${showSelector ? "invisible" : "visible"}`}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className={`${showSelector ? "invisible" : "visible"}`}
+        >
           <FormField
             control={form.control}
             name="studentName"
@@ -99,7 +102,7 @@ function ProfileSetup() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input className="w-5/6 border-none bg-gray-200" placeholder="" {...field} />
+                  <Input className="w-7/12 border-none bg-indigo-100" placeholder="" {...field} />
                 </FormControl>
                 <FormMessage className="absolute" />
               </FormItem>
@@ -109,28 +112,36 @@ function ProfileSetup() {
             control={form.control}
             name="studentGoal"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="mt-10">
                 <FormLabel>Goal (H1, H2...)</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-5/6 border-none bg-gray-200">
+                    <SelectTrigger className="w-7/12 border-none bg-indigo-100">
                       <SelectValue className="text-sm" placeholder="Select a goal." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-10 bg-white">
-                    <SelectItem className="hover:cursor-pointer" value="H1">H1</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H2">H2</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H3">H3</SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Pass">Pass</SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H1">
+                      H1
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H2">
+                      H2
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="H3">
+                      H3
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="Pass">
+                      Pass
+                    </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage className="absolute"/>
+                <FormMessage className="absolute" />
               </FormItem>
             )}
           />
           {/* Can't use buttons as it interferes with form*/}
           <a
-            className="z-0 mt-16 flex w-fit items-center gap-2 rounded bg-black px-4 py-2 text-sm text-white hover:cursor-pointer"
+            className="z-0 mt-16 flex w-fit items-center gap-2 rounded bg-indigo-700 px-4 py-2 text-sm text-white hover:cursor-pointer"
             onClick={() => setSelector(true)}
           >
             Select Availability
@@ -144,39 +155,38 @@ function ProfileSetup() {
           </Button>
         </form>
         {showSelector ? (
-            <div className="max-h-1/4 absolute top-[17%] flex w-2/5 flex-col items-center bg-white">
-              <ScheduleSelector
-                selection={studentSchedule.schedule}
-                numDays={7}
-                minTime={8}
-                maxTime={25}
-                hourlyChunks={1}
-                dateFormat={"ddd"}
-                startDate={startDate}
-                onChange={handleChange}
-                hoveredColor={"rgba(165, 180, 252, 1)"}
-                selectedColor={"rgba(99, 102, 241, 1)"}
-                unselectedColor={"rgba(224, 231, 255,1)"}
-              />
-              <a
-                className="ml-24 mt-5 w-fit rounded bg-black px-4 py-2 text-base text-white hover:cursor-pointer"
-                onClick={() => setSelector(false)}
-              >
-                Save Availability
-              </a>
-            </div>
-          ) : (
-            <></>
-          )}
+          <div className="max-h-1/4 absolute top-[17%] flex w-3/5 flex-col items-center bg-white">
+            <ScheduleSelector
+              selection={studentSchedule.schedule}
+              numDays={7}
+              minTime={8}
+              maxTime={25}
+              hourlyChunks={1}
+              dateFormat={"ddd"}
+              startDate={startDate}
+              onChange={handleChange}
+              hoveredColor={"rgba(165, 180, 252, 1)"}
+              selectedColor={"rgba(99, 102, 241, 1)"}
+              unselectedColor={"rgba(224, 231, 255,1)"}
+            />
+            <a
+              className="mt-5 w-fit self-end rounded bg-indigo-700 px-6 py-2 text-base text-white hover:cursor-pointer"
+              onClick={() => setSelector(false)}
+            >
+              Save Availability
+            </a>
+          </div>
+        ) : (
+          <></>
+        )}
       </Form>
     );
   };
 
   return (
-    <div className="mx-auto flex h-screen max-w-screen-lg items-center justify-between">
-      <div className="h-4/6 w-2/5 bg-gray-200"></div>
-      <div className="flex h-4/6 flex-col justify-center text-6xl font-bold">
-        <h2>Set up your profile</h2>
+    <div className="mx-auto flex h-screen items-center justify-center">
+      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+        <h2 className="text-6xl font-bold leading-snug">Set up your profile</h2>
         <FormComponent />
       </div>
     </div>
