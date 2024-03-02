@@ -1,6 +1,5 @@
 // // NOTE: Students will have their own userID once singed in via Google.
 const db = require("firebase-admin").firestore();
-const { DEV, DEV_UID } = require("../index");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, handleAuth } = require("../misc/utils");
 
