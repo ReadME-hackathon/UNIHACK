@@ -39,8 +39,8 @@ function SpaceFeatures() {
     }*/
     // Get data from form
     const location = useLocation();
-    const roomCode = location.state
-    console.log(roomCode)
+    const roomInfo = location.state
+    console.log(roomInfo)
     
     // Need to create onSubmit handler for "Continue" + get selected matching features from user
 
