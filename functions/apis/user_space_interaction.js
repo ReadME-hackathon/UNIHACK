@@ -8,7 +8,7 @@ exports.addUserToSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
@@ -27,7 +27,7 @@ exports.removeUserFromSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
@@ -46,7 +46,7 @@ exports.updateUserSpaceData = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
@@ -65,7 +65,7 @@ exports.listUsersInSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists

@@ -37,7 +37,7 @@ exports.createSpace = onCall(async ({ data, context }) => {
   ensureCompleteValidSpaceData(data.space_data);
 
   // Append to DB
-  const spaceRef = await db.collection("Spaces").add({
+  const spaceRef = await db.collection("spaces").add({
     created_by: uid,
     created_at: Date.now(),
     ...data.space_data,
@@ -52,7 +52,7 @@ exports.updateSpaceData = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "space_data"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
@@ -82,7 +82,7 @@ exports.deleteSpace = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
@@ -110,7 +110,7 @@ exports.getTeacherSpaces = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, []);
 
   // Retrieve spaces created by the user
-  const snapshot = await db.collection("Spaces").where("created_by", "==", uid).get();
+  const snapshot = await db.collection("spaces").where("created_by", "==", uid).get();
 
   const spaces = [];
   snapshot.forEach((doc) => {
@@ -128,7 +128,7 @@ exports.getSpaceData = onCall(async ({ data }) => {
   handleParams(data, ["space_id"]);
 
   // Retrieve space reference
-  const spaceRef = db.collection("Spaces").doc(data.space_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
   const spaceSnapshot = await spaceRef.get();
 
   // Check if space exists
