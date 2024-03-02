@@ -2,6 +2,7 @@ import HeroBanner from "@/components/HeroBanner/HeroBanner";
 import LandingBar from "@/components/Landing/LandingBar";
 import LandingFeature from "@/components/Landing/LandingFeature";
 import LandingFeatureProps from "@/components/Landing/LandingFeatureProps";
+import Footer from "@/layouts/Footer/Footer";
 
 const LandingPage = () => {
   const features: LandingFeatureProps[] = [
@@ -37,6 +38,7 @@ const LandingPage = () => {
               ))}
             </div>
       </div>
+      <Footer />
     </div>
   );
 };
