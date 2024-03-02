@@ -45,7 +45,7 @@ function JoinRoom() {
               <FormItem>
                 <FormLabel>Room code</FormLabel>
                 <FormControl>
-                  <Input className="w-5/6 border-none bg-indigo-100" placeholder="" {...field} />
+                  <Input className="w-3/5 border-none bg-indigo-100" placeholder="" {...field} />
                 </FormControl>
                 <FormMessage className="absolute" />
               </FormItem>
