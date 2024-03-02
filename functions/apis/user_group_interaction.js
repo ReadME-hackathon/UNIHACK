@@ -1,7 +1,7 @@
 // // NOTE: Students will have their own userID once singed in via Google.
 const admin = require("firebase-admin");
 const db = admin.firestore();
-const { FieldValue } = require("firebase-admin/firestore");
+const { FieldValue, Filter } = require("firebase-admin/firestore");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams } = require("../misc/utils");
 
@@ -33,7 +33,7 @@ exports.userRequestToJoinGroup = onCall(async ({ data, context }) => {
   }
 
   // Add request to the group
-  await spaceRef.collection("requests").add({
+  const request = await spaceRef.collection("requests").add({
     from_id: uid,
     to_id: leader_id,
     target_group_id: data.group_id,
@@ -41,7 +41,7 @@ exports.userRequestToJoinGroup = onCall(async ({ data, context }) => {
     timestamp: Date.now(),
   });
 
-  return { success: true };
+  return { success: true, request_id: request.id };
 });
 
 // Create a request when a user is invited to a group by the leader. Only the leader can do this.
@@ -67,7 +67,7 @@ exports.userInvitedToGroup = onCall(async ({ data, context }) => {
   }
 
   // Add request to the group
-  await spaceRef.collection("requests").add({
+  const request = await spaceRef.collection("requests").add({
     from_id: uid,
     to_id: invited_id,
     target_group_id: group_id,
@@ -75,16 +75,16 @@ exports.userInvitedToGroup = onCall(async ({ data, context }) => {
     timestamp: Date.now(),
   });
 
-  return { success: true };
+  return { success: true, request_id: request.id };
 });
 
 // Either accept the request or remove the request (decline).
 exports.processRequestDecision = onCall(async ({ data, context }) => {
   // Validate input parameters
-  const uid = handleAuthAndParams(context, data, ["request_id", "decision", "space_id"]);
+  const uid = handleAuthAndParams(context, data, ["request_id", "approved", "space_id"]);
 
   // Retrieve request data
-  const { request_id, decision, space_id } = data;
+  const { request_id, approved, space_id } = data;
 
   // Retrieve request reference
   const spaceRef = db.collection("spaces").doc(space_id);
@@ -120,7 +120,7 @@ exports.processRequestDecision = onCall(async ({ data, context }) => {
   }
 
   // Process decision
-  if (decision === "approve") {
+  if (approved) {
     // Update group members array
     await groupRef.update({
       members: FieldValue.arrayUnion(from_id), // Add the user to the group's members
@@ -135,7 +135,7 @@ exports.processRequestDecision = onCall(async ({ data, context }) => {
 
 exports.userLeaveGroup = onCall(async ({ data, context }) => {
   // Authentication
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+  const uid = handleAuthAndParams(context, data, ["space_id", "group_id"]);
 
   // Retrieve group reference
   const groupRef = db.collection(`spaces/${data.space_id}/groups`).doc(data.group_id);
@@ -149,6 +149,33 @@ exports.userLeaveGroup = onCall(async ({ data, context }) => {
   // Remove user from the members list
   await groupRef.update({
     members: admin.firestore.FieldValue.arrayRemove(uid),
+  });
+
+  return { success: true };
+});
+
+// Kicks a user from a group
+exports.kickUserFromGroup = onCall(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, ["space_id", "group_id", "kicked_user_id"]);
+
+  // Retrieve group reference
+  const groupRef = db.collection(`spaces/${data.space_id}/groups`).doc(data.group_id);
+  const groupSnapshot = await groupRef.get();
+
+  // Check if group exists
+  if (!groupSnapshot.exists) {
+    throw new HttpsError("not-found", "Group does not exist in this space.");
+  }
+
+  // Check if the user running this function is the leader of the group
+  const groupData = groupSnapshot.data();
+  if (groupData.leader_id !== uid) {
+    throw new HttpsError("permission-denied", "You are not authorized to perform this action.");
+  }
+
+  // Remove the user from the group
+  await groupRef.update({
+    members: admin.firestore.FieldValue.arrayRemove(data.kicked_user_id),
   });
 
   return { success: true };
@@ -182,10 +209,28 @@ exports.getUserGroup = onCall(async ({ data, context }) => {
   const doc = querySnapshot.docs[0];
 
   // Set the group object
-  const group = {
+  return {
     group_id: doc.id,
     ...doc.data(),
   };
+});
 
-  return { group };
+exports.getUserRequests = onCall(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
+
+  // Retrieve requests relevant to the user
+  const requestsRef = db.collection(`spaces/${data.space_id}/requests`);
+  const userRequestsSnapshot = await requestsRef
+    .where(Filter.or(Filter.where("to_id", "==", uid), Filter.where("from_id", "==", uid)))
+    .get();
+
+  const userRequests = [];
+  userRequestsSnapshot.forEach((doc) => {
+    userRequests.push({
+      request_id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  return { userRequests };
 });

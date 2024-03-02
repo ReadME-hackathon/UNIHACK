@@ -41,6 +41,30 @@ exports.removeUserFromSpace = onCall(async ({ data, context }) => {
   return { success: true };
 });
 
+// Kicks a user from a space
+exports.kickUserFromSpace = onCall(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, ["space_id", "kicked_user_id"]);
+
+  // Check if the user running this function is the creator of the space (teacher)
+  const spaceRef = db.collection("spaces").doc(data.space_id);
+  const spaceSnapshot = await spaceRef.get();
+
+  if (!spaceSnapshot.exists) {
+    throw new HttpsError("not-found", "Space does not exist. (ID: " + data.space_id + ").");
+  }
+
+  const spaceData = spaceSnapshot.data();
+
+  if (spaceData.created_by !== uid) {
+    throw new HttpsError("permission-denied", "You are not authorized to perform this action.");
+  }
+
+  // Remove the user from the space
+  await spaceRef.collection("users").doc(data.kicked_user_id).delete();
+
+  return { success: true };
+});
+
 // Updates user data in a space
 exports.updateUserSpaceData = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
