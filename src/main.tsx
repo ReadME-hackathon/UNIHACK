@@ -18,6 +18,7 @@ import UserLayout from "./layouts/UserLayout/UserLayout";
 import DashboardHome from "./routes/dashboardHome/DashboardHome";
 import Layout from "./layouts/Layout";
 import GroupSpace from "./routes/groupSpace/GroupSpace";
+
 import LoadingTeamPage from "./routes/loading/LoadingTeamPage";
 
 const router = createBrowserRouter(
@@ -29,10 +30,13 @@ const router = createBrowserRouter(
         <Route path="joinPlatform" element={<LandingPage />} />
         <Route path="group-space" element={<GroupSpace />} />
         <Route path="loading-team" element={<LoadingTeamPage />} />
-    </Route>
+      </Route>
       <Route path="signIn" element={<SignIn />} />
       <Route path="user" element={<UserLayout />}>
         <Route index element={<DashboardHome />} />
+      </Route>
+      <Route path="space" element={<UserLayout />}>
+        <Route path=":spaceId" element={<GroupSpace />} />
       </Route>
     </Route>,
   ]),
