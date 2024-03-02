@@ -122,8 +122,8 @@ function CreateSpace() {
   };
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="flex w-full h-screen items-start justify-center">
+      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">Create a GroupSpace <br/> to help others find  <br/> teammates</h2>
         <FormComponent />
       </div>

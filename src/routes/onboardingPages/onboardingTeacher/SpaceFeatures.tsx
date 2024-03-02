@@ -47,19 +47,19 @@ function CreateSpace() {
                         <Label htmlFor={curSwitch.id}>{curSwitch.name}</Label>
                     </div>
                 ))}
-                <Button className="bg-orange-100 mt-6 w-5/6">Create new criteria</Button>
+                <Button className="bg-orange-100 hover:bg-orange-100 mt-6 w-5/6">Create new criteria</Button>
             </ScrollArea>
         );
     }
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-        <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="w-full flex h-screen items-start justify-center">
+        <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
           <h2 className="text-6xl font-bold leading-snug">Allow matching<br/>by features</h2>
-          <SwitchComponent switches={[{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"}]}/>
+          <SwitchComponent switches={[{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"}]}/>
           <div className="flex gap-5">
-            <Button className="rounded bg-zinc-300 text-white">Back</Button>
-            <Button className="rounded bg-orange-500 text-white">Continue</Button>
+            <Button className="rounded bg-zinc-300 hover:bg-zinc-300 text-white">Back</Button>
+            <Button className="rounded bg-orange-500 hover:bg-orange-500 text-white">Continue</Button>
           </div>
         </div>
       </div>
