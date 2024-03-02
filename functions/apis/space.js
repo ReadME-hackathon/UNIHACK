@@ -106,7 +106,7 @@ exports.deleteSpace = onCall(async ({ data, context }) => {
 });
 
 // Retrieves spaces created by a given user ()
-exports.getTeacherSpaces = onCall(async ({ data, context }) => {
+exports.getUserSpaces = onCall(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, []);
 
   // Retrieve spaces created by the user
