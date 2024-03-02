@@ -17,16 +17,16 @@ export function isLoggedIn() {
 }
 
 export async function signInWithGoogle() {
-  signInWithPopup(auth, provider)
-    .then((results) => {
-      console.log(results);
+  try {
+    const results = await signInWithPopup(auth, provider);
+    console.log(results);
 
-      localStorage.setItem("displayName", results.user.displayName || "");
-      localStorage.setItem("photoURL", results.user.photoURL || "");
-      return true;
-    })
-    .catch((err) => {
-      console.log(err);
-      return false;
-    });
+    localStorage.setItem("displayName", results.user.displayName || "");
+    localStorage.setItem("photoURL", results.user.photoURL || "");
+
+    return true;
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+    return false;
+  }
 }

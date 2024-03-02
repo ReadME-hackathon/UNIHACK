@@ -5,10 +5,13 @@ import "./SignIn.css";
 const SignIn = () => {
   const navigate = useNavigate();
 
-  const signIn = () => {
-    signInWithGoogle().then(() => {
+  const signIn = async () => {
+    try {
+      await signInWithGoogle();
       navigate("/");
-    });
+    } catch (error) {
+      console.log("Error signing in with google:", error);
+    }
   };
 
   return (
