@@ -1,4 +1,5 @@
 import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 const HeroBanner = () => {
   return (
@@ -7,9 +8,13 @@ const HeroBanner = () => {
       <div className=" col-start-1 col-end-10 row-start-10 row-end-13 rounded-[4px] bg-neutral-200 "></div>
       <div className=" col-start-[16] col-end-[21] row-start-3 row-end-11 rounded-[4px] bg-neutral-300 "></div>
       <h2 className="w-[750px] text-6xl font-bold text-center col-start-4 row-start-5">A new way to find teammates</h2>
-      <div className="flex gap-6 col-start-8 row-start-8 font-bold text-lg">
-        <Button className=" px-10 h-12 font-bold text-lg text-white bg-orange-500 hover:text-orange-500 hover:bg-neutral-100 shadow-inner shadow-[0_4px_6px_-1px_rgba(249,115,22,0.3)] rounded-[4px]">Start event</Button>
-        <Button className="px-10 h-12 font-bold text-lg text-white bg-indigo-600 hover:text-indigo-600 hover:bg-neutral-100 shadow-inner shadow-[0_4px_6px_-1px_rgba(79,70,229,0.3)] rounded-[4px]">Join event</Button>
+      <div className="flex gap-4 col-start-8 row-start-8 font-bold text-lg">
+        <Button asChild className=" px-8 h-12 font-bold text-lg text-white bg-orange-500 hover:text-orange-500 hover:bg-neutral-100 shadow-inner shadow-[0_4px_6px_-1px_rgba(249,115,22,0.3)] rounded-[4px]">
+          <Link to="/createPlatform">Create Space</Link>
+        </Button>
+        <Button asChild className="px-10 h-12 font-bold text-lg text-white bg-indigo-600 hover:text-indigo-600 hover:bg-neutral-100 shadow-inner shadow-[0_4px_6px_-1px_rgba(79,70,229,0.3)] rounded-[4px]">
+          <Link to="/joinPlatform">Join Space</Link>
+        </Button>
       </div>
     </div>
     );
