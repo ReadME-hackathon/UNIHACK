@@ -43,3 +43,10 @@ export interface Space {
     users: SpaceUser[];
   };
 }
+
+export interface CreateNewSpace {
+  roomName: string;
+  minSize: number;
+  maxSize: number;
+  features: any[];
+}
