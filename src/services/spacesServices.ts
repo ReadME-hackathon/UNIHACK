@@ -2,8 +2,6 @@
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { isLoggedIn } from "./firestoreServices";
 
-import { Group } from "./models";
-
 const functions = getFunctions();
 
 export async function getSpaceData(spaceId: string) {
