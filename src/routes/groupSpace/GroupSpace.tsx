@@ -2,7 +2,6 @@ import MembersList from "@/components/MembersList/MembersList";
 import TutorialCard from "@/components/TutorialCard/TutorialCard";
 import TutorialCardProps from "@/components/TutorialCard/TutorialCardProps";
 import { getSpaceData } from "@/services/spacesServices";
-import { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -72,11 +71,15 @@ const GroupSpace = () => {
     spaceId = "";
   }
 
-  // Grabbing data on load
-  useEffect(() => {
-    console.log("good luck!");
-    getSpaceData(spaceId!);
-  }, []);
+  console.log("good luck!");
+  getSpaceData(spaceId)
+    .then((result) => {
+      console.log(result);
+      result;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    });
 
   return (
     <div className="flex w-full flex-row p-8">
