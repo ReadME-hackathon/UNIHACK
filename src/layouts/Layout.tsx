@@ -1,5 +1,13 @@
+import { Outlet } from "react-router";
+import { Toaster } from "sonner";
+
 const Layout = () => {
-  return <div>Layout</div>;
+  return (
+    <div>
+      <Outlet></Outlet>
+      <Toaster />
+    </div>
+  );
 };
 
 export default Layout;
