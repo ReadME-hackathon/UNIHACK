@@ -1,8 +1,6 @@
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-// TODO: https://firebase.google.com/docs/functions/locations#web
-
 // Exporting all the functions
 module.exports = {
   ...require("./apis/group.js"),

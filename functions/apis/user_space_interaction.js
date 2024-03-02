@@ -1,10 +1,10 @@
 // // NOTE: Students will have their own userID once singed in via Google.
 const db = require("firebase-admin").firestore();
-const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { handleAuthAndParams } = require("../misc/utils");
+const { HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams, onCallWrapper } = require("../misc/utils");
 
 // Adds a user to a space along with their user data
-exports.addUserToSpace = onCall(async ({ data, context }) => {
+exports.addUserToSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
@@ -23,7 +23,7 @@ exports.addUserToSpace = onCall(async ({ data, context }) => {
 });
 
 // Removes a user from a space
-exports.removeUserFromSpace = onCall(async ({ data, context }) => {
+exports.removeUserFromSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
@@ -42,7 +42,7 @@ exports.removeUserFromSpace = onCall(async ({ data, context }) => {
 });
 
 // Kicks a user from a space
-exports.kickUserFromSpace = onCall(async ({ data, context }) => {
+exports.kickUserFromSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "kicked_user_id"]);
 
   // Check if the user running this function is the creator of the space (teacher)
@@ -66,7 +66,7 @@ exports.kickUserFromSpace = onCall(async ({ data, context }) => {
 });
 
 // Updates user data in a space
-exports.updateUserSpaceData = onCall(async ({ data, context }) => {
+exports.updateUserSpaceData = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
 
   // Retrieve space reference
@@ -85,7 +85,7 @@ exports.updateUserSpaceData = onCall(async ({ data, context }) => {
 });
 
 // List all users within a space
-exports.listUsersInSpace = onCall(async ({ data, context }) => {
+exports.listUsersInSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference

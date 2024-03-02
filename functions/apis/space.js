@@ -1,7 +1,7 @@
 const db = require("firebase-admin").firestore();
 
-const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { handleAuthAndParams, handleParams } = require("../misc/utils");
+const { HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams, handleParams, onCallWrapper } = require("../misc/utils");
 
 // Ensures a space data is valid. (Doesn't have to be complete)
 // TODO: Ensure feature names are strictly unique within the space.
@@ -31,7 +31,7 @@ function ensureCompleteValidSpaceData(space_data) {
 }
 
 // Creates a space given space data. (space_id)
-exports.createSpace = onCall(async ({ data, context }) => {
+exports.createSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_data"]);
 
   ensureCompleteValidSpaceData(data.space_data);
@@ -48,7 +48,7 @@ exports.createSpace = onCall(async ({ data, context }) => {
 
 // Updates space data given space ID and new space data. (space_id, space_data)
 // TODO: Ensure min size is <= max size, even after using updateSpaceData.
-exports.updateSpaceData = onCall(async ({ data, context }) => {
+exports.updateSpaceData = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "space_data"]);
 
   // Retrieve space reference
@@ -78,7 +78,7 @@ exports.updateSpaceData = onCall(async ({ data, context }) => {
 });
 
 // Deletes a space given its ID (space_id)
-exports.deleteSpace = onCall(async ({ data, context }) => {
+exports.deleteSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve space reference
@@ -106,7 +106,7 @@ exports.deleteSpace = onCall(async ({ data, context }) => {
 });
 
 // Retrieves spaces created by a given user ()
-exports.getUserSpaces = onCall(async ({ data, context }) => {
+exports.getUserSpaces = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, []);
 
   // Retrieve spaces created by the user
@@ -124,7 +124,7 @@ exports.getUserSpaces = onCall(async ({ data, context }) => {
 });
 
 // Get space data by space ID
-exports.getSpaceData = onCall(async ({ data }) => {
+exports.getSpaceData = onCallWrapper(async ({ data }) => {
   handleParams(data, ["space_id"]);
 
   // Retrieve space reference

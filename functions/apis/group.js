@@ -1,10 +1,10 @@
 // // NOTE: Students will have their own userID once singed in via Google.
 const db = require("firebase-admin").firestore();
-const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { handleAuthAndParams, handleParams, callableWithCORS } = require("../misc/utils");
+const { HttpsError } = require("firebase-functions/v2/https");
+const { handleAuthAndParams, handleParams, onCallWrapper } = require("../misc/utils");
 
 // Creates a group within a space
-exports.createGroupInSpace = onCall(async ({ data, context }) => {
+exports.createGroupInSpace = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["space_id", "group_data"]);
 
   // Retrieve space reference
@@ -29,7 +29,7 @@ exports.createGroupInSpace = onCall(async ({ data, context }) => {
 });
 
 // Removes a group
-exports.removeGroup = onCall(async ({ data, context }) => {
+exports.removeGroup = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["group_id"]);
 
   // Retrieve group reference
@@ -54,7 +54,7 @@ exports.removeGroup = onCall(async ({ data, context }) => {
 });
 
 // Updates group data
-exports.updateGroupData = onCall(async ({ data, context }) => {
+exports.updateGroupData = onCallWrapper(async ({ data, context }) => {
   const uid = handleAuthAndParams(context, data, ["group_id", "group_data"]);
 
   // Retrieve group reference
@@ -79,7 +79,7 @@ exports.updateGroupData = onCall(async ({ data, context }) => {
 });
 
 // Get group data by group ID
-exports.getGroupData = onCall(async ({ data, context }) => {
+exports.getGroupData = onCallWrapper(async ({ data, context }) => {
   handleParams(data, ["space_id", "group_id"]);
 
   // Retrieve group reference
