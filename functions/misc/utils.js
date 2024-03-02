@@ -1,7 +1,7 @@
-const { HttpsError } = require("firebase-functions/v2/https");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 
 // When true, DEV_UID is used to authenticate
-const DEV = true;
+const DEV = false;
 // User ID used for auth during development
 const DEV_UID = "1P1go8lxq9NI16C8SgLQEZAfMKO2";
 
@@ -31,4 +31,9 @@ function handleParams(data, requiredParams) {
   }
 }
 
-module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth };
+// Wrapper function to configure CORS options for callable functions
+function onCallWrapper(handler) {
+  return onCall({ cors: true, region: "australia-southeast2" }, handler);
+}
+
+module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth, onCallWrapper };
