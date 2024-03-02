@@ -18,10 +18,7 @@ import UserLayout from "./layouts/UserLayout/UserLayout";
 import DashboardHome from "./routes/dashboardHome/DashboardHome";
 import Layout from "./layouts/Layout";
 
-import AdminSpaceView from "./routes/admin/space/AdminSpaceView";
 import UserSpaceView from "./routes/user/space/UserSpaceView";
-import AdminMySpaces from "./routes/admin/mySpaces/AdminMySpaces";
-import UserMySpaces from "./routes/user/mySpaces/UserMySpaces";
 
 import JoinRoom from "./routes/onboardingPages/onboardingStudent/JoinRoom";
 import ProfileSetup from "./routes/onboardingPages/onboardingStudent/ProfileSetup";
@@ -31,36 +28,38 @@ import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatu
 
 import { AuthProvider } from "@/auth/AuthContext.tsx";
 import { AuthenticatedElement, UnauthenticatedElement } from "@/auth/AuthElements.tsx";
+import Requests from "@/routes/request/Requests.tsx";
+
+export const URLs = {
+  login: "login",
+  app: "app",
+  edit_space: "edit_space",
+  edit_profile: "edit_profile",
+  create_space: "create_space",
+  join_space: "join_space",
+  requests: "requests",
+};
 
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<Layout />}>
       <Route path="/" element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path="signIn" element={<UnauthenticatedElement element={<SignIn />} />} />
+        <Route path={URLs.login} element={<UnauthenticatedElement element={<SignIn />} />} />
       </Route>
 
-      <Route path="user" element={<AuthenticatedElement element={<UserLayout />} />}>
+      <Route path={URLs.app} element={<AuthenticatedElement element={<UserLayout />} />}>
         <Route index element={<DashboardHome />} />
 
-        <Route path="space/*">
-          <Route index element={<UserMySpaces />} />
-          <Route path=":spaceId" element={<UserSpaceView />} />
+        <Route path=":space_id">
+          <Route index element={<UserSpaceView />} />
+          <Route path={URLs.edit_space} element={<SpaceFeatures />} />
+          <Route path={URLs.edit_profile} element={<ProfileSetup />} />
         </Route>
 
-        <Route path="join-room" element={<JoinRoom />} />
-        <Route path="profile-setup" element={<ProfileSetup />} />
-      </Route>
-
-      <Route path="admin" element={<AuthenticatedElement element={<UserLayout />} />}>
-        <Route index element={<DashboardHome />} />
-        <Route path="space/*">
-          <Route index element={<AdminMySpaces />} />
-          <Route path=":spaceId" element={<AdminSpaceView />} />
-        </Route>
-        <Route path="create-space" element={<CreateSpace />} />
-        <Route path="edit-space-features" element={<SpaceFeatures />} />
-        <Route path="profile-setup" element={<ProfileSetup />} />
+        <Route path={URLs.create_space} element={<CreateSpace />} />
+        <Route path={URLs.join_space} element={<JoinRoom />} />
+        <Route path={URLs.requests} element={<Requests />} />
       </Route>
     </Route>,
   ]),
