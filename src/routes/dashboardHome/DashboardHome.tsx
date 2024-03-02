@@ -1,5 +1,7 @@
+import MembersList from "@/components/MembersList/MembersList";
+
 const DashboardHome = () => {
-  return <div className=" h-[200vh] bg-neutral-700">DashboardHome</div>;
+  return <div className=""></div>;
 };
 
 export default DashboardHome;
