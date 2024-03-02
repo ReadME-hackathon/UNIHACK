@@ -1,7 +1,7 @@
 // // NOTE: Students will have their own userID once singed in via Google.
 const db = require("firebase-admin").firestore();
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { handleAuthAndParams, handleParams } = require("../misc/utils");
+const { handleAuthAndParams, handleParams, callableWithCORS } = require("../misc/utils");
 
 // Creates a group within a space
 exports.createGroupInSpace = onCall(async ({ data, context }) => {
@@ -20,7 +20,6 @@ exports.createGroupInSpace = onCall(async ({ data, context }) => {
   const groupData = {
     leader_id: uid,
     members: [uid],
-    member_count: 1,
     ...data.group_data,
   };
 
@@ -81,19 +80,20 @@ exports.updateGroupData = onCall(async ({ data, context }) => {
 
 // Get group data by group ID
 exports.getGroupData = onCall(async ({ data, context }) => {
-  handleParams(data, ["group_id"]);
+  handleParams(data, ["space_id", "group_id"]);
 
   // Retrieve group reference
-  const groupRef = db.collection("groups").doc(data.group_id);
+  const spaceRef = db.collection("spaces").doc(data.space_id);
+  const groupRef = spaceRef.collection("groups").doc(data.group_id);
+
+  // Get group data
   const groupSnapshot = await groupRef.get();
 
   // Check if group exists
   if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
+    throw new HttpsError("not-found", "Group does not exist in this space.");
   }
 
-  // Get group data
-  const groupData = groupSnapshot.data();
-
-  return { group: groupData };
+  // Return group data
+  return { group: groupSnapshot.data() };
 });
