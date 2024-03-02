@@ -126,8 +126,8 @@ exports.getOwnedSpaces = onCallWrapper(async ({ data, context }) => {
 });
 
 // Retrieves spaces where the current user is a member
-exports.getMemberSpaces = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, []);
+exports.getMemberSpaces = onCallWrapper(async ({ data }) => {
+  const uid = data.uid;
 
   // Retrieve spaces where the user is a member
   const snapshot = await db.collection("spaces").where("members", "array-contains", uid).get();
