@@ -1,0 +1,5 @@
+getUserGroup({
+    data: {
+        space_id: "SynQEMskRLe8wNncI0rw"
+    }
+})

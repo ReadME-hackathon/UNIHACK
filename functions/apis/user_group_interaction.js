@@ -1,37 +1,39 @@
 // // NOTE: Students will have their own userID once singed in via Google.
-const db = require("firebase-admin").firestore();
+const admin = require("firebase-admin");
+const db = admin.firestore();
+const { FieldValue } = require("firebase-admin/firestore");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { handleAuthAndParams, handleAuth } = require("../misc/utils");
+const { handleAuthAndParams } = require("../misc/utils");
 
 // Create a request when a user requests to join a group. The leader can approve or reject this.
-exports.userRequestGroup = onCall(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id"]);
+exports.userRequestToJoinGroup = onCall(async ({ data, context }) => {
+  const uid = handleAuthAndParams(context, data, ["group_id", "space_id"]);
 
-  // Retrieve group reference
-  const groupRef = db.collection("groups").doc(data.group_id);
+  // Retrieve space reference
+  const spaceRef = db.collection("spaces").doc(data.space_id);
+  const groupRef = spaceRef.collection("groups").doc(data.group_id);
   const groupSnapshot = await groupRef.get();
 
-  // Check if group exists
   if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
+    throw new HttpsError("not-found", "Group does not exist in this space.");
   }
 
-  // Get the ID of the leader from the group Snapshot
   const leader_id = groupSnapshot.data().leader_id;
 
   // Check if there's already an existing request to the same group or leader
-  const existingRequests = await groupRef
+  const existingRequest = await spaceRef
     .collection("requests")
     .where("from_id", "==", uid)
     .where("target_group_id", "==", data.group_id)
     .get();
 
-  if (!existingRequests.empty) {
+  // TODO: Check user is not already part of the group
+  if (!existingRequest.empty) {
     throw new HttpsError("already-exists", "There is already a request to join this group.");
   }
 
   // Add request to the group
-  await groupRef.collection("requests").add({
+  await spaceRef.collection("requests").add({
     from_id: uid,
     to_id: leader_id,
     target_group_id: data.group_id,
@@ -44,140 +46,146 @@ exports.userRequestGroup = onCall(async ({ data, context }) => {
 
 // Create a request when a user is invited to a group by the leader. Only the leader can do this.
 exports.userInvitedToGroup = onCall(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id", "invited_id"]);
+  // Authentication
+  const uid = handleAuthAndParams(context, data, ["group_id", "invited_id", "space_id"]);
 
-  // Retrieve group reference
-  const groupRef = db.collection("groups").doc(data.group_id);
-  const groupSnapshot = await groupRef.get();
+  // Extract necessary data
+  const { group_id, invited_id, space_id } = data;
 
-  // Check if group exists
-  if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
-  }
+  // Retrieve space reference
+  const spaceRef = db.collection("spaces").doc(space_id);
 
   // Check if the authenticated user is the leader of the group
+  const groupRef = spaceRef.collection("groups").doc(group_id);
+  const groupSnapshot = await groupRef.get();
+  if (!groupSnapshot.exists) {
+    throw new HttpsError("not-found", "Group does not exist.");
+  }
   const groupData = groupSnapshot.data();
   if (groupData.leader_id !== uid) {
-    throw new HttpsError(
-      "permission-denied",
-      "Only the group leader can invite users to the group.",
-    );
+    throw new HttpsError("permission-denied", "Only the group leader can invite users.");
   }
 
-  // Add invitation to the group
-  await groupRef.collection("requests").doc(data.invited_id).set({
-    user_id: data.invited_id,
-    status: "invited",
+  // Add request to the group
+  await spaceRef.collection("requests").add({
+    from_id: uid,
+    to_id: invited_id,
+    target_group_id: group_id,
+    type: "INVITE_TO_JOIN",
     timestamp: Date.now(),
   });
 
   return { success: true };
 });
 
-// Process a request decision (approve or reject)
+// Either accept the request or remove the request (decline).
 exports.processRequestDecision = onCall(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["request_id"]);
+  // Validate input parameters
+  const uid = handleAuthAndParams(context, data, ["request_id", "decision", "space_id"]);
+
+  // Retrieve request data
+  const { request_id, decision, space_id } = data;
 
   // Retrieve request reference
-  const requestRef = db.collection("requests").doc(data.request_id);
+  const spaceRef = db.collection("spaces").doc(space_id);
+  const requestRef = spaceRef.collection("requests").doc(request_id);
   const requestSnapshot = await requestRef.get();
 
   // Check if request exists
   if (!requestSnapshot.exists) {
-    throw new HttpsError("not-found", "Request does not exist. (ID: " + data.request_id + ").");
+    throw new HttpsError("not-found", "Request does not exist.");
   }
 
-  // Check if the authenticated user is the leader of the group
   const requestData = requestSnapshot.data();
-  const groupRef = db.collection("groups").doc(requestData.group_id);
-  const groupSnapshot = await groupRef.get();
+  const { target_group_id, type, from_id, to_id } = requestData;
 
-  if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist.");
-  }
+  const groupRef = spaceRef.collection("groups").doc(target_group_id);
 
-  const groupData = groupSnapshot.data();
-  if (groupData.leader_id !== uid) {
+  // Check if the user has permission to handle this request
+  if (type === "INVITE_TO_JOIN" && uid !== to_id) {
     throw new HttpsError(
       "permission-denied",
-      "Only the group leader can process request decisions.",
+      "User does not have permission to handle this request.",
     );
   }
 
-  // Update request status
-  await requestRef.update({
-    status: data.approved ? "approved" : "rejected",
-  });
+  if (type === "REQUEST_TO_JOIN") {
+    const groupSnapshot = await groupRef.get();
+    const groupData = groupSnapshot.data();
+
+    // Check if the user is the leader of the target group
+    if (groupData.leader_id !== uid) {
+      throw new HttpsError("permission-denied", "User is not the leader of the target group.");
+    }
+  }
+
+  // Process decision
+  if (decision === "approve") {
+    // Update group members array
+    await groupRef.update({
+      members: FieldValue.arrayUnion(from_id), // Add the user to the group's members
+    });
+  }
+
+  // Delete the request
+  await requestRef.delete();
 
   return { success: true };
 });
 
-// Within the group, create a history of join and leaves, with timestamps and a message.
 exports.userLeaveGroup = onCall(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id"]);
+  // Authentication
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve group reference
-  const groupRef = db.collection("groups").doc(data.group_id);
+  const groupRef = db.collection(`spaces/${data.space_id}/groups`).doc(data.group_id);
   const groupSnapshot = await groupRef.get();
 
   // Check if group exists
   if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
+    throw new HttpsError("not-found", "Group does not exist in this space.");
   }
 
-  // Add leave history to the group
-  await groupRef.collection("history").add({
-    user_id: uid,
-    action: "leave",
-    reason: data.reason,
-    timestamp: Date.now(),
-  });
-
-  return { success: true };
-});
-
-// User joins a group
-exports.userJoinGroup = onCall(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["group_id"]);
-
-  // Retrieve group reference
-  const groupRef = db.collection("groups").doc(data.group_id);
-  const groupSnapshot = await groupRef.get();
-
-  // Check if group exists
-  if (!groupSnapshot.exists) {
-    throw new HttpsError("not-found", "Group does not exist. (ID: " + data.group_id + ").");
-  }
-
-  // Add join history to the group
-  await groupRef.collection("history").add({
-    user_id: uid,
-    action: "join",
-    timestamp: Date.now(),
+  // Remove user from the members list
+  await groupRef.update({
+    members: admin.firestore.FieldValue.arrayRemove(uid),
   });
 
   return { success: true };
 });
 
 // Finds if a user belongs to a group. Can have no group.
-// Can only be part of one group.
 exports.getUserGroup = onCall(async ({ data, context }) => {
   // Authentication
-  const uid = handleAuth(data, context);
+  const uid = handleAuthAndParams(context, data, ["space_id"]);
 
   // Retrieve group reference
   const querySnapshot = await db
-    .collectionGroup("groups")
+    .collection(`spaces/${data.space_id}/groups`)
     .where("members", "array-contains", uid)
     .get();
 
-  let group = null;
-  querySnapshot.forEach((doc) => {
-    group = {
-      group_id: doc.id,
-      ...doc.data(),
-    };
-  });
+  // Check if no groups are found
+  if (querySnapshot.empty) {
+    return { group_id: null, msg: "Not part of any groups." };
+  }
+
+  // Check if multiple groups are found
+  if (querySnapshot.size > 1) {
+    throw new HttpsError(
+      "failed-precondition",
+      "User is part of multiple groups. This is not allowed.",
+    );
+  }
+
+  // Get the first document in the query snapshot
+  const doc = querySnapshot.docs[0];
+
+  // Set the group object
+  const group = {
+    group_id: doc.id,
+    ...doc.data(),
+  };
 
   return { group };
 });
