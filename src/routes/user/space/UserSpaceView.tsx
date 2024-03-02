@@ -1,6 +1,5 @@
 import MembersList from "@/components/MembersList/MembersList";
 import TutorialCard from "@/components/TutorialCard/TutorialCard";
-import TutorialCardProps from "@/components/TutorialCard/TutorialCardProps";
 import { getSpaceData } from "@/services/spacesServices";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -89,8 +88,18 @@ const UserSpaceView = () => {
 
   // Grabbing data on load
   useEffect(() => {
-    console.log("good luck!");
-    getSpaceData(spaceId!);
+    if (!spaceId) {
+      spaceId = "";
+    }
+
+    getSpaceData(spaceId)
+      .then((result) => {
+        console.log(result);
+        setSpaceData(result?.data as Space);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
   }, []);
 
   // Function for adding new group to space
