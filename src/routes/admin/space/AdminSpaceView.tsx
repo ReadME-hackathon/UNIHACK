@@ -7,7 +7,7 @@ import { Space } from "@/services/models";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const GroupSpace = () => {
+const AdminSpaceView = () => {
   const [spaceData, setSpaceData] = useState<Space>();
 
   // Gets the space ID
@@ -51,4 +51,4 @@ const GroupSpace = () => {
   );
 };
 
-export default GroupSpace;
+export default AdminSpaceView;
