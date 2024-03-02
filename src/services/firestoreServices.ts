@@ -1,11 +1,10 @@
 // import { db } from "../firebase";
-import { app } from "../firebase";
-import { getAuth, signInWithCredential } from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
+const provider = new GoogleAuthProvider();
 
 export function isLoggedIn() {
-  const auth = getAuth(app);
-
   const user = auth.currentUser;
 
   if (user) {
@@ -17,18 +16,14 @@ export function isLoggedIn() {
   }
 }
 
-export async function handleGoogleLoginSuccess(credentialResponse: any) {
-  console.log(credentialResponse);
-  try {
-    const token = credentialResponse.credential;
-    const auth = getAuth(app);
-
-    // Sign in with the Google OAuth credential
-    await signInWithCredential(auth, token);
-
-    // // Redirect the user to the desired page after successful authentication
-    // navigate("/");
-  } catch (error) {
-    console.error("Firebase authentication error:", error);
-  }
+export async function signInWithGoogle() {
+  signInWithPopup(auth, provider)
+    .then((results) => {
+      console.log(results);
+      return true;
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
 }
