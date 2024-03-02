@@ -20,6 +20,9 @@ export async function signInWithGoogle() {
   signInWithPopup(auth, provider)
     .then((results) => {
       console.log(results);
+
+      localStorage.setItem("displayName", results.user.displayName || "");
+      localStorage.setItem("photoURL", results.user.photoURL || "");
       return true;
     })
     .catch((err) => {
