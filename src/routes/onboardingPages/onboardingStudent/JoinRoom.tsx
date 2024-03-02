@@ -63,8 +63,8 @@ function JoinRoom() {
   };
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="flex h-screen w-full items-start justify-center">
+      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">
           Join a team
           <br />
