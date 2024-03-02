@@ -9,7 +9,8 @@ const Sidebar = () => {
   sidebarHeight = `${window.innerHeight - 56}px`;
 
   const sidebarRef = useRef<HTMLDivElement>(null);
-
+  const name = localStorage.getItem("displayName");
+  const photoURL = localStorage.getItem("photoURL") || "/";
   useEffect(() => {
     if (sidebarRef.current) {
       sidebarRef.current.style.height = sidebarHeight;
@@ -20,10 +21,10 @@ const Sidebar = () => {
     <div className="flex w-72 flex-col gap-8 bg-neutral-800 px-8 py-12" ref={sidebarRef}>
       <div className="flex flex-row items-center gap-2 text-orange-300">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={photoURL} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <span className=" font-bold">USER</span>
+        <span className=" font-bold">{name}</span>
       </div>
       <div className="flex flex-col gap-2">
         <Link to="/" className="flex flex-row items-center p-4 text-orange-300">
