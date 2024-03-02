@@ -21,6 +21,7 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
 import ScheduleSelector from "react-schedule-selector";
 import { addDays, startOfWeek, isMonday } from "date-fns";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
 interface ScheduleState {
@@ -32,6 +33,11 @@ interface Schedule {
 }
 
 function ProfileSetup() {
+  // Extracing room code from user input
+  const location = useLocation();
+  const roomCode = location.state?.roomCode;
+  console.log(roomCode)
+
   const FormComponent = () => {
     const [studentSchedule, setSchedule] = useState<ScheduleState>({ schedule: [] });
     const [showSelector, setSelector] = useState<boolean>(false);
@@ -80,11 +86,12 @@ function ProfileSetup() {
       },
     });
 
-    // Submit handler
+    // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
       if (studentSchedule.schedule.length === 0) {
         alert("Please select your availabilties.");
       } else {
+        // Add user to roomCode
         console.log(values);
       }
     }
@@ -155,7 +162,7 @@ function ProfileSetup() {
           </Button>
         </form>
         {showSelector ? (
-          <div className="max-h-1/4 absolute top-[17%] flex w-3/5 flex-col items-center bg-white">
+          <div className="max-h-1/4 absolute top-[17%] left-[18%] flex w-3/5 flex-col items-center bg-white">
             <ScheduleSelector
               selection={studentSchedule.schedule}
               numDays={7}
@@ -184,8 +191,8 @@ function ProfileSetup() {
   };
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="flex h-screen w-full items-start justify-start ml-24">
+      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">Set up your profile</h2>
         <FormComponent />
       </div>
