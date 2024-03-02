@@ -3,7 +3,7 @@ import "./LoadingTeamPage.css";
 
 const LoadingTeamPage = () => {
   return (
-    <div className="w-screen h-screen pt-16 fixed bg-slate-200">
+    <div className="w-screen h-screen pt-[15%] fixed bg-slate-200">
       <LoadingTeam />
     </div>
   )
