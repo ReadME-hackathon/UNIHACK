@@ -14,6 +14,8 @@ import "./index.css";
 import LandingPage from "./routes/landing/LandingPage";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import SignIn from "./routes/signIn/SignIn";
+import UserLayout from "./layouts/UserLayout/UserLayout";
+import DashboardHome from "./routes/dashboardHome/DashboardHome";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -23,6 +25,9 @@ const router = createBrowserRouter(
       <Route path="joinPlatform" element={<LandingPage />} />
     </Route>,
     <Route path="signIn" element={<SignIn />} />,
+    <Route path="user" element={<UserLayout />}>
+      <Route index element={<DashboardHome />} />
+    </Route>,
   ]),
 );
 
