@@ -32,9 +32,8 @@ function ensureCompleteValidSpaceData(space_data) {
 // Creates a space given space data. (space_id)
 
 exports.createSpace = onCallWrapper(async ({ data }) => {
-  console.log(data);
-  // const uid = handleAuthAndParams(context, data, ["space_data"]);
-  const uid = data.uid;
+
+  const uid = handleAuthAndParams(data, ["space_data"]);
 
   ensureCompleteValidSpaceData(data.space_data);
 
@@ -50,8 +49,8 @@ exports.createSpace = onCallWrapper(async ({ data }) => {
 
 // Updates space data given space ID and new space data. (space_id, space_data)
 // TODO: Ensure min size is <= max size, even after using updateSpaceData.
-exports.updateSpaceData = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "space_data"]);
+exports.updateSpaceData = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "space_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -80,8 +79,8 @@ exports.updateSpaceData = onCallWrapper(async ({ data, context }) => {
 });
 
 // Deletes a space given its ID (space_id)
-exports.deleteSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+exports.deleteSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -108,8 +107,8 @@ exports.deleteSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Retrieves spaces created by a given user ()
-exports.getOwnedSpaces = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, []);
+exports.getOwnedSpaces = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, []);
 
   // Retrieve spaces created by the user
   const snapshot = await db.collection("spaces").where("created_by", "==", uid).get();
@@ -127,7 +126,7 @@ exports.getOwnedSpaces = onCallWrapper(async ({ data, context }) => {
 
 // Retrieves spaces where the current user is a member
 exports.getMemberSpaces = onCallWrapper(async ({ data }) => {
-  const uid = data.uid;
+  const uid = handleAuthAndParams(data, []);
 
   // Retrieve spaces where the user is a member
   const snapshot = await db.collection("spaces").where("members", "array-contains", uid).get();
