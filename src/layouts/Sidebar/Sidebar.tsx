@@ -1,15 +1,14 @@
 import { useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ExitIcon, HomeIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { ExitIcon, HomeIcon } from "@radix-ui/react-icons";
+import { Link } from "react-router-dom";
 import { BellIcon } from "lucide-react";
 import { googleLogout } from "@/services/firestoreServices";
+import { URLs } from "@/main.tsx";
 
 // Define the type for the onSignOut prop
 
 const Sidebar = () => {
-  const navigate = useNavigate();
-
   let sidebarHeight: string;
   sidebarHeight = `${window.innerHeight - 56}px`;
 
@@ -26,7 +25,6 @@ const Sidebar = () => {
   const logout = async () => {
     try {
       await googleLogout();
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -42,13 +40,17 @@ const Sidebar = () => {
         <span className=" font-bold">{name}</span>
       </div>
       <div className="flex flex-col gap-2">
-        <Link to="/" className="flex flex-row items-center p-4 text-orange-300">
-          <HomeIcon className="mr-2 h-4 w-4" /> My GroupSpaces
+        <Link to={`/${URLs.app}`} className="flex flex-row items-center p-4 text-orange-300">
+          <HomeIcon className="mr-2 h-4 w-4" /> Dashboard
         </Link>
-        <Link to="/" className="flex flex-row items-center p-4 text-orange-300">
-          <PersonIcon className="mr-2 h-4 w-4" /> Profile
-        </Link>
-        <Link to="/" className="flex flex-row items-center p-4 text-orange-300">
+        {/*TODO: The following should only show up when the user is in a space.*/}
+        {/*<Link to="/" className="flex flex-row items-center p-4 text-orange-300">*/}
+        {/*  <PersonIcon className="mr-2 h-4 w-4" /> Profile*/}
+        {/*</Link>*/}
+        <Link
+          to={`/${URLs.app}/${URLs.requests}`}
+          className="flex flex-row items-center p-4 text-orange-300"
+        >
           <BellIcon className="mr-2 h-4 w-4" /> Notifications
         </Link>
       </div>
