@@ -8,6 +8,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button.tsx";
+import { URLs } from "@/main.tsx";
 
 const DashboardHome = () => {
   const [ownedSpaces, setOwnedSpaces] = useState<any>();
@@ -25,8 +27,14 @@ const DashboardHome = () => {
   }, []);
 
   return (
-    <div className="flex max-w-screen-lg flex-col gap-8 px-16 pt-16">
-      <h1 className="text-6xl font-bold">My GroupSpaces</h1>
+    <div className="flex max-w-screen-lg flex-col gap-8 px-16 py-12">
+      <div className="flex items-center gap-7">
+        <h2 className="text-4xl font-bold ">Spaces Dashboard</h2>
+        <Button className="rounded bg-neutral-200 font-bold hover:bg-neutral-200">
+          <Link to={`/${URLs.app}/${URLs.create_space}`}>Create Space</Link>
+        </Button>
+      </div>
+
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>Spaces I own</AccordionTrigger>
