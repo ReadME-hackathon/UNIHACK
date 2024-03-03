@@ -168,7 +168,10 @@ exports.getSpaceData = onCallWrapper(async ({ data }) => {
   // Fetch data for each subcollection
   for (const subcollection of subcollections) {
     const documents = await subcollection.get();
-    subcollectionData[subcollection.id] = documents.docs.map((doc) => doc.data());
+    subcollectionData[subcollection.id] = documents.docs.map((doc) => ({
+      id: doc.id,
+      data: doc.data(),
+    }));
   }
 
   // Combine space data with subcollection data

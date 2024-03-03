@@ -23,6 +23,7 @@ export interface SpaceUser {
   features: UserFeatures[];
   name: string;
   user_id: string;
+  photo: string;
 }
 
 export interface SpaceData {
@@ -49,4 +50,10 @@ export interface CreateNewSpace {
   minSize: number;
   maxSize: number;
   features: any[];
+}
+
+export interface UserFeatures {
+  academicYear: string;
+  targetScore: string;
+  schedule: any;
 }

@@ -1,6 +1,5 @@
 // Functions related to the spaces
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { isLoggedIn } from "./firestoreServices";
 import { CreateNewSpace } from "./models";
 import { auth } from "../firebase";
 
@@ -16,60 +15,20 @@ export async function getSpaceData(spaceId: string) {
 }
 
 export async function getUserSpaces() {
-  if (!isLoggedIn) {
-    throw new Error("Not logged in");
-  }
-
-  try {
-    let result = await httpsCallable(functions, "getMemberSpaces")({ uid: auth.currentUser?.uid });
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function test() {
-  const result = await httpsCallable(
-    functions,
-    "getAllUserSpaces",
-  )({ uid: "1P1go8lxq9NI16C8SgLQEZAfMKO2" });
-  console.log(result);
-}
-
-export async function addUserToSpace() {
-  const sample = {
-    name: "Emma",
-    features: [
-      {
-        name: "hobbies",
-        data: ["Reading", "Writing"],
-      },
-      {
-        name: "academic_year",
-        data: "First Year",
-      },
-      {
-        name: "average_score",
-        data: 85,
-      },
-      {
-        name: "schedule",
-        data: {
-          Monday: ["09:00", "10:00"],
-          Tuesday: ["13:00", "14:00"],
-          Friday: ["21:00"],
-        },
-      },
-    ],
-  };
   try {
     let result = await httpsCallable(
       functions,
-      "addUserToSpace",
-    )({ space_id: "SynQEMskRLe8wNncI0rw", user_data: sample });
-    return result;
+      "getAllUserSpaces",
+    )({
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+
+    return result.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -85,6 +44,113 @@ export async function createNewSpace(data: CreateNewSpace) {
         max_size: data.maxSize,
         features: data.features,
       },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function createNewGroup(id: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "createGroupInSpace",
+    )({
+      space_id: id,
+      group_data: {
+        name: "The best team",
+        description: "We are aiming high",
+        member_count: 1,
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addUserToSpace(id: string) {
+  try {
+    const name = localStorage.getItem("displayName");
+    const photo = localStorage.getItem("photoURL");
+
+    let result = await httpsCallable(
+      functions,
+      "addUserToSpace",
+    )({
+      space_id: id,
+      user_data: {
+        name: name,
+        photo: photo,
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserList(id: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "addUserToSpace",
+    )({
+      space_id: id,
+      user_data: {
+        name: "James",
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getGroupData(groupId: string, spaceId: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "getGroupData",
+    )({
+      space_id: spaceId,
+      group_id: groupId,
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function applyToGroup(groupId: string, spaceId: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "userRequestToJoinGroup",
+    )({
+      space_id: spaceId,
+      group_id: groupId,
       uid: auth.currentUser?.uid,
     });
 
