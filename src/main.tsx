@@ -30,6 +30,7 @@ import TutorialCardDetail from "./components/TutorialCard/TutorialCardDetail";
 import { AuthProvider } from "@/auth/AuthContext.tsx";
 import { AuthenticatedElement, UnauthenticatedElement } from "@/auth/AuthElements.tsx";
 import Requests from "@/routes/request/Requests.tsx";
+import StudentNotifications from "./routes/notifications/studentNotifications/StudentNotifications";
 
 export const URLs = {
   login: "login",
@@ -64,6 +65,7 @@ const router = createBrowserRouter(
         {/* <Route path={URLs.space_features} element={<SpaceFeatures />} /> */}
         <Route path={URLs.join_space} element={<JoinRoom />} />
         <Route path={URLs.requests} element={<Requests />} />
+        <Route path={"notifications"} element={<StudentNotifications />} />
       </Route>
     </Route>,
   ]),

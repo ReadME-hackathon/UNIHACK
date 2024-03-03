@@ -48,7 +48,7 @@ const Sidebar = () => {
         {/*  <PersonIcon className="mr-2 h-4 w-4" /> Profile*/}
         {/*</Link>*/}
         <Link
-          to={`/${URLs.app}/${URLs.requests}`}
+          to={`/${URLs.app}/notifications`}
           className="flex flex-row items-center p-4 text-orange-300"
         >
           <BellIcon className="mr-2 h-4 w-4" /> Notifications

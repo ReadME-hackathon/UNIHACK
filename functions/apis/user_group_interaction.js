@@ -216,21 +216,43 @@ exports.getUserGroup = onCallWrapper(async ({ data }) => {
 });
 
 exports.getUserRequests = onCallWrapper(async ({ data }) => {
-  const uid = handleAuthAndParams(data, ["space_id"]);
+  const uid = handleAuthAndParams(data, ["space_ids"]);
 
-  // Retrieve requests relevant to the user
-  const requestsRef = db.collection(`spaces/${data.space_id}/requests`);
-  const userRequestsSnapshot = await requestsRef
-    .where(Filter.or(Filter.where("to_id", "==", uid), Filter.where("from_id", "==", uid)))
-    .get();
+  const userRequests = {};
 
-  const userRequests = [];
-  userRequestsSnapshot.forEach((doc) => {
-    userRequests.push({
-      request_id: doc.id,
-      ...doc.data(),
+  for (const spaceId of data.space_ids) {
+    // Retrieve requests relevant to the user
+    const requestsRef = db.collection(`spaces/${spaceId}/requests`);
+    const userRequestsSnapshot = await requestsRef
+      .where(Filter.or(Filter.where("to_id", "==", uid), Filter.where("from_id", "==", uid)))
+      .get();
+
+    const requestsData = [];
+    userRequestsSnapshot.forEach((doc) => {
+      requestsData.push({
+        request_id: doc.id,
+        ...doc.data(),
+      });
     });
-  });
+
+    userRequests[spaceId] = requestsData;
+
+    // Fetch data for subcollections
+    const subcollectionsRef = db.collection(`spaces/${spaceId}/subcollections`);
+    const subcollectionsSnapshot = await subcollectionsRef.get();
+
+    const subcollectionData = {};
+    for (const subcollectionDoc of subcollectionsSnapshot.docs) {
+      const subcollectionId = subcollectionDoc.id;
+      const documents = await subcollectionDoc.ref.get();
+      subcollectionData[subcollectionId] = documents.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+    }
+
+    userRequests[spaceId].subcollections = subcollectionData;
+  }
 
   return { userRequests };
 });

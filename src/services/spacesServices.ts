@@ -161,3 +161,21 @@ export async function applyToGroup(groupId: string, spaceId: string) {
     throw error;
   }
 }
+
+export async function getUserRequests(spaceId: any[]) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "getUserRequests",
+    )({
+      space_ids: spaceId,
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
