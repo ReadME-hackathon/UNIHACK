@@ -32,7 +32,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex w-72 flex-col gap-8 bg-neutral-800 px-8 py-12" ref={sidebarRef}>
-      <div className="flex flex-row items-center gap-2 text-orange-300">
+      <div className="flex flex-row items-center gap-2 text-white">
         <Avatar>
           <AvatarImage src={photoURL} />
           <AvatarFallback>CN</AvatarFallback>
@@ -40,22 +40,18 @@ const Sidebar = () => {
         <span className=" font-bold">{name}</span>
       </div>
       <div className="flex flex-col gap-2">
-        <Link to={`/${URLs.app}`} className="flex flex-row items-center p-4 text-orange-300">
+        <Link to={`/${URLs.app}`} className="flex flex-row items-center p-4 text-white">
           <HomeIcon className="mr-2 h-4 w-4" /> Dashboard
         </Link>
-        {/*TODO: The following should only show up when the user is in a space.*/}
-        {/*<Link to="/" className="flex flex-row items-center p-4 text-orange-300">*/}
-        {/*  <PersonIcon className="mr-2 h-4 w-4" /> Profile*/}
-        {/*</Link>*/}
         <Link
           to={`/${URLs.app}/${URLs.requests}`}
-          className="flex flex-row items-center p-4 text-orange-300"
+          className="flex flex-row items-center p-4 text-white"
         >
           <BellIcon className="mr-2 h-4 w-4" /> Notifications
         </Link>
       </div>
       <div className=" mt-auto">
-        <button onClick={logout} className="flex flex-row items-center p-4 text-orange-300">
+        <button onClick={logout} className="flex flex-row items-center p-4 text-white">
           <ExitIcon className="mr-2 h-4 w-4" /> Logout
         </button>
       </div>
