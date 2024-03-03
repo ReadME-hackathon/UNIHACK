@@ -23,6 +23,7 @@ import ScheduleSelector from "react-schedule-selector";
 import { addDays, startOfWeek, isMonday } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { addUserToSpace } from "@/services/spacesServices";
 
 interface ScheduleState {
   schedule: Date[];
@@ -90,7 +91,7 @@ function ProfileSetup() {
       },
     });
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -99,7 +100,9 @@ function ProfileSetup() {
       } else {
         // Add user to roomCode
         console.log(values, studentSchedule);
-        navigate(`/app/${roomCode}`);
+        addUserToSpace(roomCode).then(() => {
+          navigate(`/app/${roomCode}`);
+        });
       }
     }
 

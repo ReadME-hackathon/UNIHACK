@@ -23,6 +23,7 @@ export interface SpaceUser {
   features: UserFeatures[];
   name: string;
   user_id: string;
+  photo: string;
 }
 
 export interface SpaceData {
