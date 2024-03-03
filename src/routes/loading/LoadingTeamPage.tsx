@@ -1,11 +1,13 @@
 import LoadingTeam from "@/components/Loading/LoadingTeam";
+import "./LoadingTeamPage.css";
+import planet from "@/assets/images/planet.png";
 
 const LoadingTeamPage = () => {
   return (
-    <div className="w-screen h-screen pt-[10vh] fixed bg-slate-200">
+    <img className="fixed h-screen w-screen bg-slate-200 pt-[15%] " src={planet}>
       <LoadingTeam />
-    </div>
-  )
-}
+    </img>
+  );
+};
 
 export default LoadingTeamPage;

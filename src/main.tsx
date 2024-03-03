@@ -32,7 +32,7 @@ import { AuthenticatedElement, UnauthenticatedElement } from "@/auth/AuthElement
 import Requests from "@/routes/request/Requests.tsx";
 
 export const URLs = {
-  login: "login",
+  login: "signIn",
   app: "app",
   edit_space: "edit_space",
   edit_profile: "edit_profile",
