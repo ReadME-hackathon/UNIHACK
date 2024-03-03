@@ -28,7 +28,6 @@ const DashboardHome = () => {
       <div className="3xl:grid-cols-4 grid grid-flow-row grid-cols-2 gap-4 2xl:grid-cols-3 ">
         {userData && userData.map((space, index) => <SpaceCard id={space} key={index} />)}{" "}
       </div>
-      <button onClick={addUserToSpace}>NNN</button>
     </div>
   );
 };
