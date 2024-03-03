@@ -76,13 +76,17 @@ export async function createNewGroup(id: string) {
 
 export async function addUserToSpace(id: string) {
   try {
+    const name = localStorage.getItem("displayName");
+    const photo = localStorage.getItem("photoURL");
+
     let result = await httpsCallable(
       functions,
       "addUserToSpace",
     )({
       space_id: id,
       user_data: {
-        name: "James",
+        name: name,
+        photo: photo,
       },
       uid: auth.currentUser?.uid,
     });
