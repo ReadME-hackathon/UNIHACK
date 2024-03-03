@@ -24,7 +24,7 @@ const LandingFeature = ({ name, desc, img }: LandingFeatureProps) => {
           {desc}
         </motion.p>
       </div>
-      <img src={img} className="h-96 w-96" />
+      <img src={img} className="h-96 w-96 object-contain" />
     </div>
   );
 };

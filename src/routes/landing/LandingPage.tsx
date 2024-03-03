@@ -5,22 +5,26 @@ import LandingFeatureProps from "@/components/Landing/LandingFeatureProps";
 import Footer from "@/layouts/Footer/Footer";
 import { motion } from "framer-motion";
 
+import planet from "@/assets/images/planet.png";
+import collab from "@/assets/images/collab.png";
+import chatBubble from "@/assets/images/chatbubble.png";
+
 const LandingPage = () => {
   const features: LandingFeatureProps[] = [
     {
       name: "Find collaborators",
       desc: "Discover individuals that suit your plans and connect with each other to start collaborating!",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Checkerboard_pattern.svg/1200px-Checkerboard_pattern.svg.png",
+      img: planet,
     },
     {
       name: "Join a dream team",
       desc: "Browse through groups doing the same project and choose your team based on shared goals!",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Checkerboard_pattern.svg/1200px-Checkerboard_pattern.svg.png",
+      img: collab,
     },
     {
       name: "Make your own",
       desc: "Create a GroupSpace to allow collaborators to find their perfect team. A hassle-free process for all those involved!",
-      img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Checkerboard_pattern.svg/1200px-Checkerboard_pattern.svg.png",
+      img: chatBubble,
     },
   ];
 
