@@ -74,7 +74,7 @@ const MembersList = ({ spaceUser }: props) => {
         {spaceUser.map((value) => (
           <MembersItem
             name={value.name}
-            photoUrl={value.user_id}
+            photoUrl={value.photo}
             status="Full"
             description={{ summary: "hi" }}
           ></MembersItem>
