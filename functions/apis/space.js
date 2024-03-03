@@ -32,6 +32,7 @@ function ensureCompleteValidSpaceData(space_data) {
 // Creates a space given space data. (space_id)
 
 exports.createSpace = onCallWrapper(async ({ data }) => {
+
   const uid = handleAuthAndParams(data, ["space_data"]);
 
   ensureCompleteValidSpaceData(data.space_data);
