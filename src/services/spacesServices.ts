@@ -28,6 +28,14 @@ export async function getUserSpaces() {
   }
 }
 
+export async function test() {
+  const result = await httpsCallable(
+    functions,
+    "getAllUserSpaces",
+  )({ uid: "1P1go8lxq9NI16C8SgLQEZAfMKO2" });
+  console.log(result);
+}
+
 export async function addUserToSpace() {
   const sample = {
     name: "Emma",

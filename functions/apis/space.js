@@ -1,6 +1,6 @@
 const db = require("firebase-admin").firestore();
 const { HttpsError, onCall } = require("firebase-functions/v2/https");
-const { handleAuthAndParams, handleParams, onCallWrapper } = require("../misc/utils");
+const { handleAuthAndParams, handleParams, onCallWrapper, handleAuth } = require("../misc/utils");
 
 // Ensures a space data is valid. (Doesn't have to be complete)
 // TODO: Ensure feature names are strictly unique within the space.
@@ -128,17 +128,62 @@ exports.getMemberSpaces = onCallWrapper(async ({ data }) => {
   const uid = handleAuthAndParams(data, []);
 
   // Retrieve spaces where the user is a member
-  const snapshot = await db.collection("spaces").where("members", "array-contains", uid).get();
+  const memberSpacesSnapshot = await db.collection("spaces").get();
 
-  const spaces = [];
-  snapshot.forEach((doc) => {
-    spaces.push({
+  const memberSpaces = [];
+  memberSpacesSnapshot.forEach((spaceDoc) => {
+    const usersCollectionRef = spaceDoc.ref.collection("users");
+    usersCollectionRef
+      .where("user_id", "==", uid)
+      .get()
+      .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          memberSpaces.push({
+            space_id: spaceDoc.id,
+            ...spaceDoc.data(),
+          });
+        }
+      });
+  });
+
+  return { memberSpaces };
+});
+
+// Retrieves spaces where the current user is a member and spaces owned by the current user
+exports.getAllUserSpaces = onCallWrapper(async ({ data }) => {
+  const uid = handleAuth(data);
+
+  // Retrieve spaces where the user is a member
+  const memberSpacesSnapshot = await db.collection("spaces").get();
+
+  const memberSpaces = [];
+  memberSpacesSnapshot.forEach((spaceDoc) => {
+    const usersCollectionRef = spaceDoc.ref.collection("users");
+    usersCollectionRef
+      .where("user_id", "==", uid)
+      .get()
+      .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          memberSpaces.push({
+            space_id: spaceDoc.id,
+            ...spaceDoc.data(),
+          });
+        }
+      });
+  });
+
+  // Retrieve spaces owned by the user
+  const ownedSnapshot = await db.collection("spaces").where("created_by", "==", uid).get();
+  const ownedSpaces = [];
+
+  ownedSnapshot.forEach((doc) => {
+    ownedSpaces.push({
       space_id: doc.id,
       ...doc.data(),
     });
   });
 
-  return { spaces };
+  return { memberSpaces, ownedSpaces };
 });
 
 // Get space data by space ID

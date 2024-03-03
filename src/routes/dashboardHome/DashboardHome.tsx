@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addUserToSpace, getUserSpaces } from "@/services/spacesServices";
+import { addUserToSpace, getUserSpaces, test } from "@/services/spacesServices";
 import { Space } from "@/services/models";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const DashboardHome = () => {
           <SpaceCard title={space.name} id={space.space_id} key={index} />
         ))}
       </div>
-      <button onClick={addUserToSpace}>NNN</button>
+      <button onClick={test}>NNN</button>
     </div>
   );
 };
