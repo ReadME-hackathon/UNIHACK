@@ -2,10 +2,7 @@ import { BRANDNAME } from "@/constants";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { isLoggedIn } from "@/services/firestoreServices";
-
 import logo from "@/assets/images/logo.png";
-
-import { URLs } from "@/main.tsx";
 
 interface NavbarButtonProps {
   link: string;
@@ -29,15 +26,12 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex flex-row items-center gap-6">
-          <NavbarButton
-            link={`/${URLs.app}/${URLs.create_space}`}
-            text="Create Space"
-          ></NavbarButton>
-          <NavbarButton link={`/${URLs.app}/${URLs.join_space}`} text="Join Space"></NavbarButton>
+          <NavbarButton link="/app/create_space" text="Create team platform"></NavbarButton>
+          <NavbarButton link="/app/join_space" text="Join platform"></NavbarButton>
           {loginState ? (
-            <NavbarButton link={`/${URLs.app}`} text="My dashboard"></NavbarButton>
+            <NavbarButton link="/app" text="My dashboard"></NavbarButton>
           ) : (
-            <NavbarButton link={`/${URLs.login}`} text="Sign in"></NavbarButton>
+            <NavbarButton link="/signIn" text="Sign in"></NavbarButton>
           )}
         </div>
       </div>
