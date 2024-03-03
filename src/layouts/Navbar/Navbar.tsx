@@ -2,6 +2,7 @@ import { BRANDNAME } from "@/constants";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { isLoggedIn } from "@/services/firestoreServices";
+import logo from "@/assets/images/logo.png";
 
 interface NavbarButtonProps {
   link: string;
@@ -19,7 +20,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-screen-lg flex-row items-center justify-between px-8">
         <div className=" flex flex-row items-center gap-4">
-          <img className="h-8 w-8"></img>
+          <img className="h-8 w-8" src={logo} ></img>
           <Link to={"/"} className="font-bold transition-all hover:text-orange-500">
             {BRANDNAME}
           </Link>
