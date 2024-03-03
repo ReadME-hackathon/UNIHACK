@@ -50,3 +50,9 @@ export interface CreateNewSpace {
   maxSize: number;
   features: any[];
 }
+
+export interface UserFeatures {
+  academicYear: string;
+  targetScore: string;
+  schedule: any;
+}

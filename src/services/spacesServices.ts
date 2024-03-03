@@ -1,7 +1,7 @@
 // Functions related to the spaces
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { isLoggedIn } from "./firestoreServices";
-import { CreateNewSpace } from "./models";
+import { CreateNewSpace, UserFeatures } from "./models";
 import { auth } from "../firebase";
 
 const functions = getFunctions();
@@ -28,37 +28,12 @@ export async function getUserSpaces() {
   }
 }
 
-export async function addUserToSpace() {
-  const sample = {
-    name: "Emma",
-    features: [
-      {
-        name: "hobbies",
-        data: ["Reading", "Writing"],
-      },
-      {
-        name: "academic_year",
-        data: "First Year",
-      },
-      {
-        name: "average_score",
-        data: 85,
-      },
-      {
-        name: "schedule",
-        data: {
-          Monday: ["09:00", "10:00"],
-          Tuesday: ["13:00", "14:00"],
-          Friday: ["21:00"],
-        },
-      },
-    ],
-  };
+export async function addUserToSpace(spaceId: string, userData: UserFeatures) {
   try {
     let result = await httpsCallable(
       functions,
       "addUserToSpace",
-    )({ space_id: "SynQEMskRLe8wNncI0rw", user_data: sample });
+    )({ space_id: spaceId, user_data: userData, uid: auth.currentUser?.uid });
     return result;
   } catch (error) {
     console.log(error);
