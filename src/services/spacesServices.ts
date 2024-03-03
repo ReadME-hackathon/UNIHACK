@@ -1,6 +1,5 @@
 // Functions related to the spaces
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { isLoggedIn } from "./firestoreServices";
 import { CreateNewSpace } from "./models";
 import { auth } from "../firebase";
 
@@ -16,15 +15,21 @@ export async function getSpaceData(spaceId: string) {
 }
 
 export async function getUserSpaces() {
-  if (!isLoggedIn) {
-    throw new Error("Not logged in");
-  }
-
   try {
-    let result = httpsCallable(functions, "getMemberSpaces")({ uid: auth.currentUser?.uid });
-    return result;
+    let result = await httpsCallable(
+      functions,
+      "getAllUserSpaces",
+    )({
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    console.log(result.data);
+
+    return result.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
