@@ -21,7 +21,7 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
 import ScheduleSelector from "react-schedule-selector";
 import { addDays, startOfWeek, isMonday } from "date-fns";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 interface ScheduleState {
@@ -74,10 +74,10 @@ function ProfileSetup() {
         message: "Please enter a valid name.",
       }),
       studentGoal: z.string().min(2, {
-        message: "Please enter a valid goal",
+        message: "Please enter a valid goal.",
       }),
-      studentYear: z.string().min(2, {
-        message: "Please enter a valid goal",
+      studentYear: z.string().min(1, {
+        message: "Please enter a valid year level.",
       }),
     });
 
@@ -90,14 +90,16 @@ function ProfileSetup() {
       },
     });
 
+    const navigate = useNavigate()
+
     // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log("hi");
       if (studentSchedule.schedule.length === 0) {
         alert("Please select your availabilties.");
       } else {
         // Add user to roomCode
-        console.log(values);
+        console.log(values, studentSchedule);
+        navigate(`/app/${roomCode}`);
       }
     }
 
@@ -164,16 +166,16 @@ function ProfileSetup() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-10 bg-white">
-                    <SelectItem className="hover:cursor-pointer" value="H1">
+                    <SelectItem className="hover:cursor-pointer" value="1">
                       First year
                     </SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H2">
+                    <SelectItem className="hover:cursor-pointer" value="2">
                       Second year
                     </SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="H3">
+                    <SelectItem className="hover:cursor-pointer" value="3">
                       Third year
                     </SelectItem>
-                    <SelectItem className="hover:cursor-pointer" value="Pass">
+                    <SelectItem className="hover:cursor-pointer" value="4">
                       Fourth year
                     </SelectItem>
                   </SelectContent>
@@ -199,7 +201,7 @@ function ProfileSetup() {
         </form>
 
         {showSelector ? (
-          <div className="max-h-1/4 absolute left-[18%] top-[17%] flex w-3/5 flex-col items-center bg-white">
+          <div className="max-h-1/4 absolute left-[18%] top-[15%] flex w-3/5 flex-col items-center bg-white">
             <ScheduleSelector
               selection={studentSchedule.schedule}
               numDays={7}
