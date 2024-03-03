@@ -24,7 +24,7 @@ export const auth = getAuth(app);
 
 export const functions = getFunctions(app);
 
-// Dev Only
+// // Dev Only
 if (process.env.NODE_ENV !== "production") {
   connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 }

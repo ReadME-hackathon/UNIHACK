@@ -29,12 +29,12 @@ function JoinRoom() {
     });
 
     const navigate = useNavigate();
-    
+
     // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
       // Handle room number authentication before navigating
-      navigate("/user/profile-setup", { state: { roomCode: values.roomCode } });
+      navigate("edit_profile", { state: { roomCode: values.roomCode } });
     }
 
     return (
@@ -65,7 +65,7 @@ function JoinRoom() {
   };
 
   return (
-    <div className="flex h-screen w-full items-start justify-start ml-24">
+    <div className="ml-24 flex h-screen w-full items-start justify-start">
       <div className="flex h-5/6 w-1/3 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">
           Join a team
