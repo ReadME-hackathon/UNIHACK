@@ -26,15 +26,15 @@ const DashboardHome = () => {
     <div className="flex max-w-screen-lg flex-col gap-8 px-16 pt-16">
       <h1 className="text-6xl font-bold">My GroupSpaces</h1>
       <div className="3xl:grid-cols-4 grid grid-flow-row grid-cols-2 gap-4 2xl:grid-cols-3 ">
-        <SpaceCard id={"99UrkhFUEziS0Zsoqffj"} title="Spanish Class" members="32 Members" key={1} />
+        <SpaceCard id={"SynQEMskRLe8wNncI0rw"} title="Spanish Class" members="32 Members" key={1} />
         <SpaceCard
-          id={"9eQFWt1Oa3djUW8EuBZU"}
+          id={"ZbhqwjcGy36k6yYzurO8"}
           title="Computing Class"
           members="16 Members"
           key={2}
         />
         <SpaceCard
-          id={"Etv1jCATk9eBSH9klBfz"}
+          id={"rFyPzMBBX22K1jGTV6bc"}
           title="Algoritmics 10001"
           members="22 Members"
           key={3}
