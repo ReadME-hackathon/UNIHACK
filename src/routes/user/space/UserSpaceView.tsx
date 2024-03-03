@@ -52,16 +52,18 @@ const UserSpaceView = () => {
       >
         <div className="w-2/3 pr-8">
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold">{`Code: ${space_id}`}</h3>
             <h1 className="text-6xl font-bold">{spaceName}</h1>
-            <div className="my-6 flex items-center gap-7">
-              <h2 className="text-3xl font-bold ">Groups</h2>
-              <Button
-                onClick={togglePopup}
-                className="rounded bg-neutral-200 font-bold hover:bg-neutral-200"
-              >
-                Create Group
-              </Button>
+            <div className="my-6 flex items-center justify-between">
+              <div className="flex items-center gap-7">
+                <h2 className="text-3xl font-bold">Groups</h2>
+                <Button
+                  onClick={togglePopup}
+                  className="rounded bg-neutral-200 font-bold hover:bg-neutral-200"
+                >
+                  Create Group
+                </Button>
+              </div>
+              <h3 className="text-lg font-bold">{`Code: ${space_id}`}</h3>
             </div>
           </div>
           <div className="3xl:grid-cols-4 grid grid-flow-row grid-cols-2 gap-4 overflow-y-auto 2xl:grid-cols-3">
