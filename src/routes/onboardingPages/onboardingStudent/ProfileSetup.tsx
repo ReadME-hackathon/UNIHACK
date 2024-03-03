@@ -21,7 +21,9 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Input } from "@/components/ui/input";
 import ScheduleSelector from "react-schedule-selector";
 import { addDays, startOfWeek, isMonday } from "date-fns";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { addUserToSpace } from "@/services/spacesServices";
 
 interface ScheduleState {
   schedule: Date[];
@@ -32,6 +34,11 @@ interface Schedule {
 }
 
 function ProfileSetup() {
+  // Extracing room code from user input
+  const location = useLocation();
+  const roomCode = location.state?.roomCode;
+  console.log(roomCode);
+
   const FormComponent = () => {
     const [studentSchedule, setSchedule] = useState<ScheduleState>({ schedule: [] });
     const [showSelector, setSelector] = useState<boolean>(false);
@@ -68,7 +75,10 @@ function ProfileSetup() {
         message: "Please enter a valid name.",
       }),
       studentGoal: z.string().min(2, {
-        message: "Please enter a valid goal",
+        message: "Please enter a valid goal.",
+      }),
+      studentYear: z.string().min(1, {
+        message: "Please enter a valid year level.",
       }),
     });
 
@@ -77,15 +87,22 @@ function ProfileSetup() {
       defaultValues: {
         studentName: "",
         studentGoal: "",
+        studentYear: "",
       },
     });
 
-    // Submit handler
+    const navigate = useNavigate();
+
+    // SUBMIT HANDLER
     function onSubmit(values: z.infer<typeof formSchema>) {
       if (studentSchedule.schedule.length === 0) {
         alert("Please select your availabilties.");
       } else {
-        console.log(values);
+        // Add user to roomCode
+        console.log(values, studentSchedule);
+        addUserToSpace(roomCode).then(() => {
+          navigate(`/app/${roomCode}`);
+        });
       }
     }
 
@@ -139,6 +156,37 @@ function ProfileSetup() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="studentYear"
+            render={({ field }) => (
+              <FormItem className="mt-10">
+                <FormLabel>Year level</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-7/12 border-none bg-indigo-100">
+                      <SelectValue className="text-sm" placeholder="Your year level" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="z-10 bg-white">
+                    <SelectItem className="hover:cursor-pointer" value="1">
+                      First year
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="2">
+                      Second year
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="3">
+                      Third year
+                    </SelectItem>
+                    <SelectItem className="hover:cursor-pointer" value="4">
+                      Fourth year
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage className="absolute" />
+              </FormItem>
+            )}
+          />
           {/* Can't use buttons as it interferes with form*/}
           <a
             className="z-0 mt-16 flex w-fit items-center gap-2 rounded bg-indigo-700 px-4 py-2 text-sm text-white hover:cursor-pointer"
@@ -154,8 +202,9 @@ function ProfileSetup() {
             Continue
           </Button>
         </form>
+
         {showSelector ? (
-          <div className="max-h-1/4 absolute top-[17%] flex w-3/5 flex-col items-center bg-white">
+          <div className="max-h-1/4 absolute left-[18%] top-[15%] flex w-3/5 flex-col items-center bg-white">
             <ScheduleSelector
               selection={studentSchedule.schedule}
               numDays={7}
@@ -184,8 +233,8 @@ function ProfileSetup() {
   };
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-      <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="ml-24 flex h-screen w-full items-start justify-start">
+      <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
         <h2 className="text-6xl font-bold leading-snug">Set up your profile</h2>
         <FormComponent />
       </div>

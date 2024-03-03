@@ -1,1 +1,1 @@
-export const BRANDNAME = "BRANDNAME";
+export const BRANDNAME = "GroupSpace";

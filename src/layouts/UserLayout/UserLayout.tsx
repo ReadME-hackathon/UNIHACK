@@ -4,11 +4,13 @@ import { Outlet } from "react-router";
 
 const UserLayout = () => {
   return (
-    <div className=" h-screen overflow-clip ">
+    <div className="h-screen overflow-y-clip">
       <Navbar></Navbar>
       <div className="flex flex-row">
         <Sidebar></Sidebar>
-        <Outlet></Outlet>
+        <div className="h-screen w-full overflow-y-scroll ">
+          <Outlet></Outlet>
+        </div>
       </div>
     </div>
   );

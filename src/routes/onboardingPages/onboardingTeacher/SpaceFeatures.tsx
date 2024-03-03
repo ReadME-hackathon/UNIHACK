@@ -2,6 +2,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface SwitchFeatures {
     id: string,
@@ -12,7 +13,7 @@ interface SwitchComponentProps {
     switches: SwitchFeatures[];
 }
 
-function CreateSpace() {
+function SpaceFeatures() {
     /*
     const defaultFeatures = {
         "Music":{
@@ -36,7 +37,17 @@ function CreateSpace() {
             "availability":"",
         }
     }*/
-    // If "Purpose" was selected, get default values from defaultFeatures
+    // Get data from form
+    const location = useLocation();
+    const roomInfo = location.state
+    console.log(roomInfo)
+    
+    // Need to create onSubmit handler for "Continue" + get selected matching features from user
+
+    const navigate = useNavigate();
+    const goBackHandler = () => {
+        navigate("/user/create-space")
+    }
 
     const SwitchComponent = ({ switches }: SwitchComponentProps) => {
         return (
@@ -47,23 +58,23 @@ function CreateSpace() {
                         <Label htmlFor={curSwitch.id}>{curSwitch.name}</Label>
                     </div>
                 ))}
-                <Button className="bg-orange-100 mt-6 w-5/6">Create new criteria</Button>
+                <Button className="bg-orange-100 hover:bg-orange-100 mt-6 w-5/6">Create new criteria</Button>
             </ScrollArea>
         );
     }
 
   return (
-    <div className="mx-auto flex h-screen items-center justify-center">
-        <div className="flex h-4/6 w-1/2 flex-col justify-center gap-10">
+    <div className="flex h-screen w-full items-start justify-start ml-24">
+        <div className="flex h-5/6 w-1/2 flex-col justify-center gap-10">
           <h2 className="text-6xl font-bold leading-snug">Allow matching<br/>by features</h2>
-          <SwitchComponent switches={[{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"}]}/>
+          <SwitchComponent switches={[{id:"test",name:"test"},{id:"test",name:"test"},{id:"test",name:"test"}]}/>
           <div className="flex gap-5">
-            <Button className="rounded bg-zinc-300 text-white">Back</Button>
-            <Button className="rounded bg-orange-500 text-white">Continue</Button>
+            <Button onClick={goBackHandler} className="rounded bg-zinc-300 hover:bg-zinc-300 text-white">Back</Button>
+            <Button className="rounded bg-orange-500 hover:bg-orange-500 text-white">Continue</Button>
           </div>
         </div>
       </div>
   );
 }
 
-export default CreateSpace;
+export default SpaceFeatures;
