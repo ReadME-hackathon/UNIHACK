@@ -1,9 +1,10 @@
 import { MembersItemModel } from "./Members.models";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 
 const MembersItem = ({ photoUrl, name, status, description }: MembersItemModel) => {
+  console.log(description)
   if (name === "" && photoUrl === "" && status === ""){
     return(
       <HoverCard>
