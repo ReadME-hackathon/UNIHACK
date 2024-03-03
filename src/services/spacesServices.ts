@@ -21,7 +21,7 @@ export async function getUserSpaces() {
   }
 
   try {
-    let result = await httpsCallable(functions, "getMemberSpaces")({ uid: auth.currentUser?.uid });
+    let result = httpsCallable(functions, "getMemberSpaces")({ uid: auth.currentUser?.uid });
     return result;
   } catch (error) {
     console.log(error);
