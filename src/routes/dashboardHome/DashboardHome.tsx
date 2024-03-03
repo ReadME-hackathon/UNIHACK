@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addUserToSpace, getUserSpaces } from "@/services/spacesServices";
+import { getUserSpaces, test } from "@/services/spacesServices";
 import { Space } from "@/services/models";
 import { Link } from "react-router-dom";
 
