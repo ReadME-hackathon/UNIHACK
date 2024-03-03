@@ -51,7 +51,7 @@ export async function createNewSpace(data: CreateNewSpace) {
   }
 }
 
-export async function createNewGroup(id) {
+export async function createNewGroup(id: string) {
   try {
     let result = await httpsCallable(
       functions,
@@ -75,6 +75,27 @@ export async function createNewGroup(id) {
 }
 
 export async function addUserToSpace(id: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "addUserToSpace",
+    )({
+      space_id: id,
+      user_data: {
+        name: "James",
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUserList(id: string) {
   try {
     let result = await httpsCallable(
       functions,

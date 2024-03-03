@@ -11,19 +11,22 @@ interface props {
 const MembersList = ({ spaceUser }: props) => {
   let { space_id } = useParams();
 
+  // Joining Team
   const onUserJoin = () => {
     if (!space_id) {
       space_id = "";
     }
 
-    addUserToSpace(space_id);
+    addUserToSpace(space_id).then(() => {
+      window.location.reload();
+    });
   };
 
   if (!spaceUser || !Array.isArray(spaceUser) || spaceUser.length === 0) {
     // Return null or an appropriate fallback component
     return (
       <div className="flex h-4/5 w-full flex-col gap-5 overflow-y-auto rounded bg-neutral-100 p-8">
-        <div>
+        <div className="flex flex-row justify-between">
           <h3 className="mb-4 text-4xl font-bold">Members</h3>
           <Button variant="outline" onClick={onUserJoin}>
             Join
@@ -61,7 +64,12 @@ const MembersList = ({ spaceUser }: props) => {
 
   return (
     <div className="flex h-4/5 w-full flex-col gap-5 overflow-y-auto rounded bg-neutral-100 p-8">
-      <h3 className="mb-4 text-4xl font-bold">Members</h3>
+      <div className="flex flex-row justify-between">
+        <h3 className="mb-4 text-4xl font-bold">Members</h3>
+        <Button variant="outline" onClick={onUserJoin}>
+          Join
+        </Button>
+      </div>
       <div className="flex flex-col gap-4 ">
         {spaceUser.map((value) => (
           <MembersItem

@@ -38,6 +38,7 @@ const UserSpaceView = () => {
         console.log(result);
         setSpaceName((result?.data as { space: { name: string } }).space.name);
         setSpaceData(result?.data as Space);
+        console.log(spaceData);
       })
       .catch((error: unknown) => {
         console.log(error);
@@ -88,7 +89,7 @@ const UserSpaceView = () => {
           </div>
         </div>
         <div className="flex max-h-[950px] min-h-[700px] w-1/3 flex-col justify-between gap-10">
-          <MembersList spaceUser={[]}></MembersList>
+          <MembersList spaceUser={spaceData ? spaceData.subcollections.users : []}></MembersList>
           <div
             onClick={copyLink}
             className="mb-16 flex h-1/6 items-center justify-center gap-5 bg-neutral-100 text-3xl font-bold underline hover:cursor-pointer"
@@ -102,6 +103,9 @@ const UserSpaceView = () => {
         <NewGroupPopup
           onClose={togglePopup}
           onSubmit={() => {
+            if (!space_id) {
+              space_id = "";
+            }
             createNewGroup(space_id).then(() => {
               window.location.reload();
             });
