@@ -24,6 +24,7 @@ import JoinRoom from "./routes/onboardingPages/onboardingStudent/JoinRoom";
 import ProfileSetup from "./routes/onboardingPages/onboardingStudent/ProfileSetup";
 
 import CreateSpace from "./routes/onboardingPages/onboardingTeacher/CreateSpace";
+import TutorialCardDetail from "./components/TutorialCard/TutorialCardDetail";
 // import SpaceFeatures from "./routes/onboardingPages/onboardingTeacher/SpaceFeatures";
 
 import { AuthProvider } from "@/auth/AuthContext.tsx";
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
           <Route index element={<UserSpaceView />} />
           {/* <Route path={URLs.edit_space} element={<SpaceFeatures />} /> */}
           <Route path={URLs.edit_profile} element={<ProfileSetup />} />
+          <Route path=":group_id" element={<TutorialCardDetail />} />
         </Route>
 
         <Route path={URLs.create_space} element={<CreateSpace />} />

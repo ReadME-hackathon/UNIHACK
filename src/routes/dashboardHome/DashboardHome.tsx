@@ -34,7 +34,6 @@ const DashboardHome = () => {
             <div className="3xl:grid-cols-4 grid grid-flow-row grid-cols-2 gap-4 2xl:grid-cols-3 ">
               {ownedSpaces
                 ? ownedSpaces.map((item: any, key: any) => {
-                    console.log(item);
                     return (
                       <SpaceCard
                         id={item.space_id}
@@ -54,7 +53,6 @@ const DashboardHome = () => {
             <div className="3xl:grid-cols-4 grid grid-flow-row grid-cols-2 gap-4 2xl:grid-cols-3 ">
               {memberSpaces
                 ? memberSpaces.map((item: any, key: any) => {
-                    console.log(item);
                     return (
                       <SpaceCard
                         id={item.space_id}

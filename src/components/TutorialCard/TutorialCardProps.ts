@@ -4,4 +4,5 @@ export default interface TutorialCardProps {
   size?: number;
   enrolled: number;
   description: string;
+  id: string;
 }

@@ -68,11 +68,12 @@ const UserSpaceView = () => {
             {spaceData?.subcollections.groups ? (
               spaceData?.subcollections.groups.map((team: any, index) => (
                 <TutorialCard
-                  name={team.name}
-                  enrolled={team.member_count}
+                  name={team.data.name}
+                  enrolled={team.data.member_count}
                   size={spaceData?.space.max_size || 0}
-                  description={team.description}
+                  description={team.data.description}
                   key={index}
+                  id={team.id}
                 />
               ))
             ) : (

@@ -24,7 +24,6 @@ export async function getUserSpaces() {
     });
 
     console.log("DONE");
-    console.log(result.data);
 
     return result.data;
   } catch (error) {
@@ -114,6 +113,44 @@ export async function getUserList(id: string) {
       user_data: {
         name: "James",
       },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getGroupData(groupId: string, spaceId: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "getGroupData",
+    )({
+      space_id: spaceId,
+      group_id: groupId,
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function applyToGroup(groupId: string, spaceId: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "userRequestToJoinGroup",
+    )({
+      space_id: spaceId,
+      group_id: groupId,
       uid: auth.currentUser?.uid,
     });
 
