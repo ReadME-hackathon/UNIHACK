@@ -7,7 +7,6 @@ import logo from "@/assets/images/logo.png";
 
 import { URLs } from "@/main.tsx";
 
-
 interface NavbarButtonProps {
   link: string;
   text: string;
@@ -24,7 +23,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-screen-lg flex-row items-center justify-between px-8">
         <div className=" flex flex-row items-center gap-4">
-          <img className="h-8 w-8" src={logo} ></img>
+          <img className="h-8 w-8" src={logo}></img>
           <Link to={"/"} className="font-bold transition-all hover:text-orange-500">
             {BRANDNAME}
           </Link>
@@ -61,8 +60,8 @@ const NavbarButton = ({ link, text }: NavbarButtonProps) => {
     <Link
       className={
         urlPath == link
-          ? "text-neutral-950 transition-all hover:text-indigo-600"
-          : "text-neutral-600 transition-all hover:text-indigo-600"
+          ? "font-medium text-neutral-950 transition-all hover:text-indigo-600"
+          : "font-medium text-neutral-800 transition-all hover:text-indigo-600"
       }
       to={link}
     >
