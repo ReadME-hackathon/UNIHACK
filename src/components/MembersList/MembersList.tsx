@@ -51,12 +51,6 @@ const MembersList = ({ spaceUser }: props) => {
             status=""
             description={{ summary: "" }}
           ></MembersItem>
-          <MembersItem
-            name={""}
-            photoUrl={""}
-            status=""
-            description={{ summary: "" }}
-          ></MembersItem>
         </div>
       </div>
     );
@@ -71,12 +65,13 @@ const MembersList = ({ spaceUser }: props) => {
         </Button>
       </div>
       <div className="flex flex-col gap-4 ">
-        {spaceUser.map((value) => (
+        {spaceUser.map((value, index) => (
           <MembersItem
             name={value.name}
             photoUrl={value.photo}
-            status="Full"
+            status="Open"
             description={{ summary: "hi" }}
+            key={index}
           ></MembersItem>
         ))}
       </div>
