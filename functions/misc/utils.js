@@ -32,7 +32,10 @@ function handleParams(data, requiredParams) {
 
 // Wrapper function to configure CORS options for callable functions
 function onCallWrapper(handler) {
-  return onCall({ cors: true }, handler);
+  return onCall(
+    { cors: ["https://findmygroup.netlify.app", "https://unihack-36dcb.web.app"] },
+    handler,
+  );
 }
 
 module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth, onCallWrapper };
