@@ -32,7 +32,6 @@ function ensureCompleteValidSpaceData(space_data) {
 // Creates a space given space data. (space_id)
 
 exports.createSpace = onCallWrapper(async ({ data }) => {
-
   const uid = handleAuthAndParams(data, ["space_data"]);
 
   ensureCompleteValidSpaceData(data.space_data);
@@ -104,50 +103,6 @@ exports.deleteSpace = onCallWrapper(async ({ data }) => {
   await spaceRef.delete();
 
   return { success: true };
-});
-
-// Retrieves spaces created by a given user ()
-exports.getOwnedSpaces = onCallWrapper(async ({ data }) => {
-  const uid = handleAuthAndParams(data, []);
-
-  // Retrieve spaces created by the user
-  const snapshot = await db.collection("spaces").where("created_by", "==", uid).get();
-
-  const spaces = [];
-  snapshot.forEach((doc) => {
-    spaces.push({
-      space_id: doc.id,
-      ...doc.data(),
-    });
-  });
-
-  return { spaces };
-});
-
-// Retrieves spaces where the current user is a member
-exports.getMemberSpaces = onCallWrapper(async ({ data }) => {
-  const uid = handleAuthAndParams(data, []);
-
-  // Retrieve spaces where the user is a member
-  const memberSpacesSnapshot = await db.collection("spaces").get();
-
-  const memberSpaces = [];
-  memberSpacesSnapshot.forEach((spaceDoc) => {
-    const usersCollectionRef = spaceDoc.ref.collection("users");
-    usersCollectionRef
-      .where("user_id", "==", uid)
-      .get()
-      .then((querySnapshot) => {
-        if (!querySnapshot.empty) {
-          memberSpaces.push({
-            space_id: spaceDoc.id,
-            ...spaceDoc.data(),
-          });
-        }
-      });
-  });
-
-  return { memberSpaces };
 });
 
 // Retrieves spaces where the current user is a member and spaces owned by the current user
