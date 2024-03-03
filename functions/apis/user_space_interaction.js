@@ -4,8 +4,8 @@ const { HttpsError } = require("firebase-functions/v2/https");
 const { handleAuthAndParams, onCallWrapper } = require("../misc/utils");
 
 // Adds a user to a space along with their user data
-exports.addUserToSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
+exports.addUserToSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "user_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -23,8 +23,8 @@ exports.addUserToSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Removes a user from a space
-exports.removeUserFromSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+exports.removeUserFromSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -42,8 +42,8 @@ exports.removeUserFromSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Kicks a user from a space
-exports.kickUserFromSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "kicked_user_id"]);
+exports.kickUserFromSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "kicked_user_id"]);
 
   // Check if the user running this function is the creator of the space (teacher)
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -66,8 +66,8 @@ exports.kickUserFromSpace = onCallWrapper(async ({ data, context }) => {
 });
 
 // Updates user data in a space
-exports.updateUserSpaceData = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id", "user_data"]);
+exports.updateUserSpaceData = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id", "user_data"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
@@ -85,8 +85,8 @@ exports.updateUserSpaceData = onCallWrapper(async ({ data, context }) => {
 });
 
 // List all users within a space
-exports.listUsersInSpace = onCallWrapper(async ({ data, context }) => {
-  const uid = handleAuthAndParams(context, data, ["space_id"]);
+exports.listUsersInSpace = onCallWrapper(async ({ data }) => {
+  const uid = handleAuthAndParams(data, ["space_id"]);
 
   // Retrieve space reference
   const spaceRef = db.collection("spaces").doc(data.space_id);
