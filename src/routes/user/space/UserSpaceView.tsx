@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2Icon } from "@radix-ui/react-icons";
+import NewGroupPopup from "@/components/NewGroupPopup/NewGroupPopup";
 
 const UserSpaceView = () => {
   const [spaceData, setSpaceData] = useState<Space>();
@@ -17,6 +18,11 @@ const UserSpaceView = () => {
   const togglePopup = () => {
     setPopup(!displayPopup);
   };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    alert("Link copied!")
+  }
 
   // Gets the space ID
   let { space_id } = useParams();
@@ -70,12 +76,12 @@ const UserSpaceView = () => {
         </div>
       </div>
       <div className="w-1/3 flex flex-col justify-between gap-10 max-h-[950px] min-h-[700px]">
-        <div className="h-1/6 bg-neutral-100 mb-16 font-bold underline flex gap-5 items-center justify-center text-3xl"><Link2Icon className="scale-150"/>Share Link</div>
+        <MembersList spaceUser={[]}></MembersList>
+        <div onClick={copyLink} className="hover:cursor-pointer h-1/6 bg-neutral-100 mb-16 font-bold underline flex gap-5 items-center justify-center text-3xl"><Link2Icon className="scale-150 mt-2"/>Share Link</div>
       </div>
     </div>
     {displayPopup ? (
-        <div>popup
-        {/*<NewGroupPopup onClose={togglePopup} onSubmit={()=>{}}/>*/}</div>
+      <NewGroupPopup onClose={togglePopup} onSubmit={()=>{}}/>
       ): (<></>)}
     </>
   );
