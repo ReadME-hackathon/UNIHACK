@@ -26,8 +26,8 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex flex-row items-center gap-6">
-          <NavbarButton link="/createPlatform" text="Create team platform"></NavbarButton>
-          <NavbarButton link="/joinPlatform" text="Join platform"></NavbarButton>
+          <NavbarButton link="/app/create_space" text="Create team platform"></NavbarButton>
+          <NavbarButton link="/app/join_space" text="Join platform"></NavbarButton>
           {loginState ? (
             <NavbarButton link="/app" text="My dashboard"></NavbarButton>
           ) : (
