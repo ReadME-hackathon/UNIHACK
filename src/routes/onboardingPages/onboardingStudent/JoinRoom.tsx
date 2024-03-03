@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import highfive2 from "@/assets/images/highfive2.png";
 
 function JoinRoom() {
   const FormComponent = () => {
@@ -67,6 +68,7 @@ function JoinRoom() {
   return (
     <div className="ml-24 flex h-screen w-full items-start justify-start">
       <div className="flex h-5/6 w-1/3 flex-col justify-center gap-10">
+        <img className="h-64 w-64" src={highfive2}></img>
         <h2 className="text-6xl font-bold leading-snug">
           Join a team
           <br />
