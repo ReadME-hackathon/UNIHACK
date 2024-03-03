@@ -28,18 +28,6 @@ export async function getUserSpaces() {
   }
 }
 
-export async function addUserToSpace(spaceId: string, userData: UserFeatures) {
-  try {
-    let result = await httpsCallable(
-      functions,
-      "addUserToSpace",
-    )({ space_id: spaceId, user_data: userData, uid: auth.currentUser?.uid });
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 export async function createNewSpace(data: CreateNewSpace) {
   try {
     let result = await httpsCallable(
@@ -74,6 +62,27 @@ export async function createNewGroup(id) {
         name: "The best team",
         description: "We are aiming high",
         member_count: 1,
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addUserToSpace(id: string) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "addUserToSpace",
+    )({
+      space_id: id,
+      user_data: {
+        name: "James",
       },
       uid: auth.currentUser?.uid,
     });
