@@ -64,9 +64,9 @@ export async function createNewGroup(id: string) {
     )({
       space_id: id,
       group_data: {
-        name: "The best team",
-        description: "We are aiming high",
-        member_count: 1,
+        name: "Team 1",
+        description: "Aiming for an H1 please join if interested",
+        member_count: 5,
       },
       uid: auth.currentUser?.uid,
     });
