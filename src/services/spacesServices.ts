@@ -1,7 +1,7 @@
 // Functions related to the spaces
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { isLoggedIn } from "./firestoreServices";
-import { CreateNewSpace, UserFeatures } from "./models";
+import { CreateNewSpace } from "./models";
 import { auth } from "../firebase";
 
 const functions = getFunctions();
