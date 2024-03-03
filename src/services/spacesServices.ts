@@ -62,3 +62,26 @@ export async function createNewSpace(data: CreateNewSpace) {
     throw error;
   }
 }
+
+export async function createNewGroup(id) {
+  try {
+    let result = await httpsCallable(
+      functions,
+      "createGroupInSpace",
+    )({
+      space_id: id,
+      group_data: {
+        name: "The best team",
+        description: "We are aiming high",
+        member_count: 1,
+      },
+      uid: auth.currentUser?.uid,
+    });
+
+    console.log("DONE");
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
