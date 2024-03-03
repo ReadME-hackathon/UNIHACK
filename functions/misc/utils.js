@@ -1,10 +1,5 @@
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 
-// When true, DEV_UID is used to authenticate
-const DEV = false;
-// User ID used for auth during development
-const DEV_UID = "1P1go8lxq9NI16C8SgLQEZAfMKO2";
-
 // Function to handle authentication and parameter checking
 function handleAuthAndParams(data, requiredParams) {
   const uid = handleAuth(data);
@@ -33,9 +28,12 @@ function handleParams(data, requiredParams) {
 // Wrapper function to configure CORS options for callable functions
 function onCallWrapper(handler) {
   return onCall(
-    { cors: ["https://findmygroup.netlify.app", "https://unihack-36dcb.web.app"] },
+    {
+      cors: ["https://findmygroup.netlify.app", "https://unihack-36dcb.web.app"],
+      region: "australia-southeast1",
+    },
     handler,
   );
 }
 
-module.exports = { DEV, DEV_UID, handleAuthAndParams, handleParams, handleAuth, onCallWrapper };
+module.exports = { handleAuthAndParams, handleParams, handleAuth, onCallWrapper };
