@@ -2,9 +2,8 @@
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { CreateNewSpace } from "./models";
 import { app, auth } from "../firebase";
-import { SERVER_REGION } from "@/main.tsx";
 
-const functions = getFunctions(app, SERVER_REGION);
+const functions = getFunctions(app, "australia-southeast1");
 
 export async function getSpaceData(spaceId: string) {
   try {

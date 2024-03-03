@@ -42,8 +42,6 @@ export const URLs = {
   requests: "requests",
 };
 
-export const SERVER_REGION = "australia-southeast1";
-
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<Layout />}>
