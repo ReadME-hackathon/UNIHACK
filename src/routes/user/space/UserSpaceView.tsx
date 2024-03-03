@@ -39,7 +39,7 @@ const UserSpaceView = () => {
         setSpaceName((result?.data as { space: { name: string } }).space.name);
         setSpaceData(result?.data as Space);
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
   }, []);
