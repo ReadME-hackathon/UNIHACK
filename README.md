@@ -1,3 +1,5 @@
+![Landing Page](https://github.com/ReadME-hackathon/UNIHACK/assets/19798018/c10d2495-0428-4fd9-b316-0ae94ad7cc2a)
+
 # GroupSpace
 
 GroupSpace is a platform designed to revolutionize team projects.
