@@ -2,10 +2,13 @@ import { createNewSpace } from "@/services/spacesServices";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import collab from "@/assets/images/collab.png";
+
 function CreateSpace() {
   return (
     <div className="ml-24 flex h-screen w-full items-start justify-start">
       <div className="flex h-5/6 w-3/4 flex-col justify-center gap-10 xl:w-1/2">
+        <img className="h-64 w-64" src={collab}></img>
         <h2 className="text-6xl font-bold leading-snug">
           Create a GroupSpace to help others find teammates
         </h2>

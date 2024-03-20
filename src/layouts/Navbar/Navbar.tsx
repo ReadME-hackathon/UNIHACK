@@ -2,7 +2,7 @@ import { BRANDNAME } from "@/constants";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { isLoggedIn } from "@/services/firestoreServices";
-import { URLs } from "@/main.tsx";
+import logo from "@/assets/images/logo.png";
 
 interface NavbarButtonProps {
   link: string;
@@ -10,6 +10,7 @@ interface NavbarButtonProps {
 }
 
 const Navbar = () => {
+  const location = useLocation();
   const [loginState, setLoginState] = useState<boolean>(false);
 
   useEffect(() => {
@@ -18,23 +19,22 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-screen-lg flex-row items-center justify-between px-8">
+      <div
+        className={`${location.pathname === "/" && "max-w-screen-lg"} mx-auto flex h-14 flex-row items-center justify-between px-8`}
+      >
         <div className=" flex flex-row items-center gap-4">
-          <img className="h-8 w-8"></img>
+          <img className="h-8 w-8" src={logo}></img>
           <Link to={"/"} className="font-bold transition-all hover:text-orange-500">
             {BRANDNAME}
           </Link>
         </div>
         <div className="flex flex-row items-center gap-6">
-          <NavbarButton
-            link={`/${URLs.app}/${URLs.create_space}`}
-            text="Create Space"
-          ></NavbarButton>
-          <NavbarButton link={`/${URLs.app}/${URLs.join_space}`} text="Join Space"></NavbarButton>
+          <NavbarButton link="/app/create_space" text="Create team platform"></NavbarButton>
+          <NavbarButton link="/app/join_space" text="Join platform"></NavbarButton>
           {loginState ? (
-            <NavbarButton link={`/${URLs.app}`} text="My dashboard"></NavbarButton>
+            <NavbarButton link="/app" text="My dashboard"></NavbarButton>
           ) : (
-            <NavbarButton link={`/${URLs.login}`} text="Sign in"></NavbarButton>
+            <NavbarButton link="/signIn" text="Sign in"></NavbarButton>
           )}
         </div>
       </div>
@@ -57,8 +57,8 @@ const NavbarButton = ({ link, text }: NavbarButtonProps) => {
     <Link
       className={
         urlPath == link
-          ? "text-neutral-950 transition-all hover:text-indigo-600"
-          : "text-neutral-600 transition-all hover:text-indigo-600"
+          ? "font-medium text-neutral-950 transition-all hover:text-indigo-600"
+          : "font-medium text-neutral-800 transition-all hover:text-indigo-600"
       }
       to={link}
     >
